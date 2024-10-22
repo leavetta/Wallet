@@ -15,6 +15,9 @@
 
         [ForeignKey(nameof(CategoryId))]
         [InverseProperty(nameof(Category.Transactions))]
-        public virtual Category CategoryNavigation { get; set; }
+        public Category CategoryNavigation { get; set; }
+
+        [InverseProperty(nameof(User.Transactions))]
+        public User UserNavigation { get; set; }
     }
 }

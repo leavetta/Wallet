@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WalletAspNetCore.DataBaseOperations.EFStructures;
+using Microsoft.EntityFrameworkCore;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WalletAspNetCore.Api.Controllers
 {
@@ -15,42 +15,18 @@ namespace WalletAspNetCore.Api.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateBalance()
-        {
+        //[HttpPut]
+        //public async Task<IActionResult> UpdateBalance(Guid id)
+        //{
+        //    var balance = await _dbContext.Balances.FirstOrDefaultAsync(b => b.Id == id);
+        //    if (balance == null)
+        //    {
+        //        return NotFound("Balance not found");
+        //    }
 
-        }
 
-        // GET: api/<BalancesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+        //}
 
-        // GET api/<BalancesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<BalancesController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<BalancesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<BalancesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }

@@ -10,6 +10,6 @@
         public string Name {  get; set; }
 
         [InverseProperty(nameof(Transaction.CategoryNavigation))]
-        public virtual IEnumerable<Transaction> Transactions { get; set; } = new List<Transaction>();
+        public IEnumerable<Transaction> Transactions { get; set; } = new List<Transaction>();
     }
 }

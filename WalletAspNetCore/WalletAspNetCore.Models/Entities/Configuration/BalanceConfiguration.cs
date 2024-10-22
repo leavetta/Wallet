@@ -6,11 +6,10 @@ namespace WalletAspNetCore.Models.Entities.Configuration
         public void Configure(EntityTypeBuilder<Balance> builder)
         {
             builder.HasKey(k => k.Id);
-            builder.HasData(new Balance
-            {
-                Id = Guid.NewGuid(),
-                CurrentAmount = 0
-            });
+
+            builder.HasOne(b => b.UserNavigation)
+                .WithOne(u => u.BalanceNavigation)
+                .HasForeignKey<User>("FK_Balance_User_UserId");
             
         }
     }

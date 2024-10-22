@@ -9,6 +9,10 @@ namespace WalletAspNetCore.Models.Entities.Configuration
                 .WithMany(c => c.Transactions)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasForeignKey("FK_Transactions_Category_CategoryId");
+
+            builder.HasOne(t => t.UserNavigation)
+                .WithMany(u => u.Transactions)
+                .HasForeignKey("FK_Transactions_User_UserId");
         }
     }
 }
