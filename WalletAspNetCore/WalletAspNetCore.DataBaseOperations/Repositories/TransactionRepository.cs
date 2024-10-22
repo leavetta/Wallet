@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WalletAspNetCore.DataBaseOperations
+namespace WalletAspNetCore.DataBaseOperations.Repositories
 {
-    public interface IBaseRepository
+    internal class TransactionRepository
     {
-
     }
 }

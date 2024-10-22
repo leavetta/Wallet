@@ -7,6 +7,6 @@
         public decimal CurrentAmount { get; set; } = 0;
 
         [InverseProperty(nameof(User.BalanceNavigation))]
-        public User UserNavigation { get; set; }
+        public User? UserNavigation { get; set; } = null;
     }
 }
