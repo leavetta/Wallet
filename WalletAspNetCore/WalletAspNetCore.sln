@@ -3,7 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletAspNetCore", "WalletAspNetCore.csproj", "{408C9F84-EEA0-4676-93BC-D2895D964134}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletAspNetCore.Models", "WalletAspNetCore.Models\WalletAspNetCore.Models.csproj", "{1F7E4995-FA03-4DFF-A33A-EE7BB7390FBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletAspNetCore.DataBaseOperations", "WalletAspNetCore.DataBaseOperations\WalletAspNetCore.DataBaseOperations.csproj", "{9B6FF262-954E-4EBA-A3A6-5F7CF87D6562}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletAspNetCore.Api", "WalletAspNetCore.Api\WalletAspNetCore.Api.csproj", "{1FCDCCC7-8922-4C52-8448-927DB430777C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{C0CFA72E-9F06-407D-9001-44C2B3709634}"
+	ProjectSection(SolutionItems) = preProject
+		docker-compose.yml = docker-compose.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +20,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{408C9F84-EEA0-4676-93BC-D2895D964134}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{408C9F84-EEA0-4676-93BC-D2895D964134}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{408C9F84-EEA0-4676-93BC-D2895D964134}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{408C9F84-EEA0-4676-93BC-D2895D964134}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F7E4995-FA03-4DFF-A33A-EE7BB7390FBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F7E4995-FA03-4DFF-A33A-EE7BB7390FBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F7E4995-FA03-4DFF-A33A-EE7BB7390FBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F7E4995-FA03-4DFF-A33A-EE7BB7390FBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B6FF262-954E-4EBA-A3A6-5F7CF87D6562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B6FF262-954E-4EBA-A3A6-5F7CF87D6562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B6FF262-954E-4EBA-A3A6-5F7CF87D6562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B6FF262-954E-4EBA-A3A6-5F7CF87D6562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FCDCCC7-8922-4C52-8448-927DB430777C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FCDCCC7-8922-4C52-8448-927DB430777C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FCDCCC7-8922-4C52-8448-927DB430777C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FCDCCC7-8922-4C52-8448-927DB430777C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
