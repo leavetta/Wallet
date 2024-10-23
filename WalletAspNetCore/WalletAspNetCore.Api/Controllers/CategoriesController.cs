@@ -1,43 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+using WalletAspNetCore.Api.DTO;
+using WalletAspNetCore.DataBaseOperations.EFStructures;
+using WalletAspNetCore.DataBaseOperations.Repositories;
 
 namespace WalletAspNetCore.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class CategoriesController : ControllerBase
     {
-        // GET: api/<CategoriesController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ApplicationDbContext _dbContext;
+        private readonly CategoryRepository _categoryRepository;
+
+        public CategoriesController(ApplicationDbContext dbContext, CategoryRepository categoryRepository)
         {
-            return new string[] { "value1", "value2" };
+            _dbContext = dbContext;
+            _categoryRepository = categoryRepository;
         }
 
-        // GET api/<CategoriesController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<CategoriesController>
         [HttpPost]
-        public void Post([FromBody] string value)
-        {
+        public async Task<ActionResult<Guid>> Create(string name) 
+        { 
+            var category = await _categoryRepository.Create(name);
+            return Ok(category.Id);
         }
 
-        // PUT api/<CategoriesController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpGet]
+        public async Task<ActionResult<CategoriesResponse>> GetById(Guid id)
         {
-        }
+            var category = await _categoryRepository.GetById(id);
+            var categoryResponse = new CategoriesResponse(category.Id, category.Name);
 
-        // DELETE api/<CategoriesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Ok(categoryResponse);
         }
     }
 }

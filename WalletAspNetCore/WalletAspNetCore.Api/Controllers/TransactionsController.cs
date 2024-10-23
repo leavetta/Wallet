@@ -1,43 +1,47 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WalletAspNetCore.Api.DTO;
+using WalletAspNetCore.DataBaseOperations.EFStructures;
+using WalletAspNetCore.DataBaseOperations.Repositories;
+using WalletAspNetCore.Models.Entities;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace WalletAspNetCore.Api.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class TransactionsController : ControllerBase
     {
-        // GET: api/<TransactionsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ApplicationDbContext _dbContext;
+        private readonly TransactionRepository _transactionRepository;
+        private readonly UserRepository _userRepository;
+        private readonly CategoryRepository _categoryRepository;
+
+        public TransactionsController(ApplicationDbContext dbContext, TransactionRepository transactionRepository, UserRepository userRepository, CategoryRepository categoryRepository)
         {
-            return new string[] { "value1", "value2" };
+            _dbContext = dbContext;
+            _transactionRepository = transactionRepository;
+            _userRepository = userRepository;
+            _categoryRepository = categoryRepository;
         }
 
-        // GET api/<TransactionsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<TransactionsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Guid>> Create(Guid userId, decimal amount, Guid categoryId)
         {
+            var user = await _userRepository.GetById(userId);
+            var category = await _categoryRepository.GetById(categoryId);
+
+            var transaction = await _transactionRepository.Create(user, category, amount);
+
+            return Ok(transaction.Id);
         }
 
-        // PUT api/<TransactionsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpGet]
+        public async Task<ActionResult<List<TransactionsResponse>>> GetAll(Guid id)
         {
-        }
+            var transactions = await _transactionRepository.GetAll(id);
+            var transactionsResponse = transactions.Select(t => new TransactionsResponse(t.Id, t.Amount, t.OperationDate, t.CategoryNavigation.Name));
 
-        // DELETE api/<TransactionsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Ok(transactionsResponse);
         }
     }
 }

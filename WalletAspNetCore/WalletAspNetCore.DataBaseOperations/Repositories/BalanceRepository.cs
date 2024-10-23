@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.Models.Entities;
 
@@ -20,7 +15,9 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
 
         public async Task<Guid> Update(User user, Transaction transaction)
         {
-            var balance = await _dbContext.Balances.FirstOrDefaultAsync(b => b.UserNavigation.Id == user.Id);
+            var balance = await _dbContext.Balances
+                .Include(b=>b.UserNavigation)
+                .FirstOrDefaultAsync(b => b.UserNavigation.Id == user.Id);
             
             if (balance == null)
             {
@@ -35,13 +32,23 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
 
         public async Task<Balance> Create()
         {
-            Balance balance = new Balance();
-            balance.CurrentAmount = 0;
-            balance.UserNavigation = null;
-            _dbContext.Balances.Attach(balance);
+            Balance balance = new()
+            {
+                CurrentAmount = 0,
+                UserNavigation = null
+            };
+            await _dbContext.Balances.AddAsync(balance);
 
             await _dbContext.SaveChangesAsync();
 
+            return balance;
+        }
+
+        public async Task<Balance> GetByUserId(Guid id)
+        {
+            var balance = await _dbContext.Balances
+                .Include(b=>b.UserNavigation)
+                .FirstOrDefaultAsync(b => b.Id == id);
             return balance;
         }
     }

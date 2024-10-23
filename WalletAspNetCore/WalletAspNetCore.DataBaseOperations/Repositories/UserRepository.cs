@@ -12,33 +12,38 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
     public class UserRepository
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly BalanceRepository _balanceRepository;
 
-        public UserRepository(ApplicationDbContext dbContext, BalanceRepository balanceRepository)
+        public UserRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
-            _balanceRepository = balanceRepository;
         }
 
         public async Task<User> GetById(Guid id)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == id);
+            var user = await _dbContext.Users
+                .Include(u=>u.BalanceNavigation)
+                .Include(t=>t.Transactions)
+                .FirstOrDefaultAsync(u => u.Id == id);
             return user;
         }
 
-        public async Task<User> Update(User user)
-        {
+        //public async Task<User> Update(User user)
+        //{
 
-        }
+        //}
 
         public async Task<User> Create(Balance balance, string name, string email, string password)
         {
-            User user = new User();
-            user.Id = Guid.NewGuid();
-            user.Name = name;
-            user.Email = email;
-            user.Password = password;
-            user.BalanceNavigation = balance;
+            User user = new()
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                Email = email,
+                Password = password,
+                BalanceNavigation = balance
+            };
+
+            await _dbContext.Users.AddAsync(user);
 
             await _dbContext.SaveChangesAsync();
 
