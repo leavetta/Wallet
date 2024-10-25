@@ -25,7 +25,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return category;
         }
 
-        public async Task<Category> GetById(Guid id)
+        public async Task<Category?> GetById(Guid id)
         {
             var category = await _dbContext.Categories
                 //.Include(c=>c.Transactions)
@@ -33,6 +33,13 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return category;
         }
 
+        public async Task<Category> Delete(Category category)
+        {
+            _dbContext.Categories.Remove(category);
+
+            await _dbContext.SaveChangesAsync();
+            return category;
+        }
         
     }
 }

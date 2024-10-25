@@ -2,7 +2,7 @@
 using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories;
 using Microsoft.EntityFrameworkCore;
-using WalletAspNetCore.Api.DTO;
+using WalletAspNetCore.Api.DTO.Responses;
 
 
 namespace WalletAspNetCore.Api.Controllers
@@ -22,7 +22,8 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<BalancesResponse>> GetById(Guid id)
+        [Route("[action]")]
+        public async Task<IActionResult> GetById(Guid id)
         {
             var balance = await _balanceRepository.GetByUserId(id);
             if (balance == null)
@@ -36,7 +37,13 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
 
+        [HttpPut]
+        public async Task<IActionResult> UpdateBalance(Guid userId, decimal currentAmount)
+        {
+            await _balanceRepository.Update(userId, currentAmount);
 
+            return Ok();
+        }
 
     }
 }

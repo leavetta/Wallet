@@ -1,4 +1,4 @@
-﻿namespace WalletAspNetCore.Api.DTO
+﻿namespace WalletAspNetCore.Api.DTO.Responses
 {
     public record UsersResponse
     (

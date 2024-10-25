@@ -20,11 +20,21 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
 
         public async Task<User> GetById(Guid id)
         {
-            var user = await _dbContext.Users
+            var userEntity = await _dbContext.Users
                 .Include(u=>u.BalanceNavigation)
                 .Include(t=>t.Transactions)
-                .FirstOrDefaultAsync(u => u.Id == id);
-            return user;
+                .FirstOrDefaultAsync(u => u.Id == id) ?? throw new Exception();
+            return userEntity;
+        }
+
+        public async Task<User> GetByEmail(string email)
+        {
+            var userEntity = await _dbContext.Users
+                .AsNoTracking()
+                .Include(u => u.BalanceNavigation)
+                .Include(t => t.Transactions)
+                .FirstOrDefaultAsync(u => u.Email == email) ?? throw new Exception();
+            return userEntity;
         }
 
         //public async Task<User> Update(User user)

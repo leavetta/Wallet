@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WalletAspNetCore.Api.DTO;
+using WalletAspNetCore.Api.DTO.Responses;
 using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories;
 
@@ -19,14 +19,14 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create(string name) 
+        public async Task<IActionResult> Create(string name) 
         { 
             var category = await _categoryRepository.Create(name);
             return Ok(category.Id);
         }
 
         [HttpGet]
-        public async Task<ActionResult<CategoriesResponse>> GetById(Guid id)
+        public async Task<IActionResult> GetById(Guid id)
         {
             var category = await _categoryRepository.GetById(id);
             var categoryResponse = new CategoriesResponse(category.Id, category.Name);
