@@ -3,6 +3,7 @@ using WalletAspNetCore.Api.DTO.Responses;
 using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories;
 using WalletAspNetCore.Models.Entities;
+using WalletAspNetCore.Services;
 
 
 namespace WalletAspNetCore.Api.Controllers
@@ -16,18 +17,21 @@ namespace WalletAspNetCore.Api.Controllers
         private readonly UserRepository _userRepository;
         private readonly CategoryRepository _categoryRepository;
         private readonly BalanceRepository _balanceRepository;
+        private readonly TransactionService _transactionService;
 
         public TransactionsController(ApplicationDbContext dbContext, 
             TransactionRepository transactionRepository, 
             UserRepository userRepository, 
             CategoryRepository categoryRepository,
-            BalanceRepository balanceRepository)
+            BalanceRepository balanceRepository,
+            TransactionService transactionService)
         {
             _dbContext = dbContext;
             _transactionRepository = transactionRepository;
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
             _balanceRepository = balanceRepository;
+            _transactionService = transactionService;
         }
 
         [HttpPost]
@@ -50,6 +54,21 @@ namespace WalletAspNetCore.Api.Controllers
             var transactionsResponse = transactions.Select(t => new TransactionsResponse(t.Id, t.Amount, t.OperationDate, t.CategoryNavigation.Name));
 
             return Ok(transactionsResponse);
+        }
+
+        public async Task<IActionResult> GetReportSelectedKindTransactions(Guid id, bool selectedKey)
+        {
+            Dictionary<Category, decimal> categoriesAmount = new Dictionary<Category, decimal>();
+
+            var categories = await _categoryRepository.GetSelectedCategories(id, selectedKey);
+
+            foreach (var category in categories)
+            {
+                decimal amount = Math.Abs(category.Transactions.Sum(t => t.Amount));
+                categoriesAmount[category] = amount;
+            }
+
+            return Ok(categoriesAmount);
         }
     }
 }

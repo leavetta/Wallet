@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WalletAspNetCore.Api.DTO.Requests;
 using WalletAspNetCore.Api.DTO.Responses;
 using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories;
@@ -19,9 +20,9 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(string name) 
+        public async Task<IActionResult> Create(CreateCategoryRequest createCategoryRequest) 
         { 
-            var category = await _categoryRepository.Create(name);
+            var category = await _categoryRepository.Create(createCategoryRequest.Name, createCategoryRequest.IsIncome);
             return Ok(category.Id);
         }
 
