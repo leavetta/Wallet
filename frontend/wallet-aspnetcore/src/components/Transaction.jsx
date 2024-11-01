@@ -1,26 +1,30 @@
 import {
-	Card,
-	CardBody,
-	CardFooter,
-	CardHeader,
-	Divider,
-	Heading,
-	Text,
+	Box,
 } from "@chakra-ui/react";
-import moment from "moment/moment";
 
-export default function Transaction({ title, desctiption, createdAt }) {
+export default function Transaction({ amount, createdAt, categoryName}) {
 	return (
-		<Card variant={"filled"}>
-			<CardHeader>
-				<Heading size={"md"}>{title}</Heading>
-			</CardHeader>
-			<Divider borderColor={"gray"} />
-			<CardBody>
-				<Text>{desctiption}</Text>
-			</CardBody>
-			<Divider borderColor={"gray"} />
-			<CardFooter>{moment(createdAt).format("DD/MM/YYYY h:mm:ss")}</CardFooter>
-		</Card>
+		<Box display='flex' alignItems='center' height="12" borderColor="gray.400" borderBottomWidth="2px">
+			<Box p="1" 
+				textTransform='uppercase' 
+				fontWeight='semibold' 
+				width="200px">
+				{categoryName}
+			</Box>
+			<Box width="30px"/>
+			<Box p="1" width="200px"
+				color='white.500'
+				fontWeight='semibold'
+				textTransform='uppercase'>
+				{amount}
+			</Box>
+			<Box width="30px"/>
+			<Box p="1" 
+				textTransform='uppercase' 
+				fontWeight='semibold' 
+				width="150px">
+				{createdAt}
+			</Box>
+		</Box>
 	);
 }

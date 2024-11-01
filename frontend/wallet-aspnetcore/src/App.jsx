@@ -8,7 +8,6 @@ import HomePage from "./components/HomePage";
 // import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
-  
   const onRegister = async (user) => {
 		let userId = await registerUser(user);
     console.log(userId);
@@ -27,7 +26,7 @@ function App() {
           <Routes>
               <Route exact path="/"  element={<RegisterForm onRegister={onRegister}/>} />
               <Route path="/login"  element={<LoginForm onLogin={onLogin}/>} />
-              <Route path="/home"  element={<HomePage/>} />
+              <Route path="/home"  element={<HomePage />} />
               {/* <Route element={<ProtectedRoute />}>
                 <Route path="/home" element={<HomePage />} />
               </Route> */}

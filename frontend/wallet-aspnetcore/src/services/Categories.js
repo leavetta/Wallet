@@ -1,9 +1,13 @@
 import axios from "axios";
 
 
-export const createCategory = async (category) => {
+export const createCategory = async (category, isDeposit) => {
 	try {
-		var response = await axios.post("https://localhost:7242/categories", category);
+		var response = await axios.post("https://localhost:7242/categories", {
+			params:{
+				name: category.name,
+				isIncome: isDeposit,
+			}});
 		return response.data;
 	} catch (e) {
 		console.error(e);

@@ -4,18 +4,18 @@ import {
     Text
   } from '@chakra-ui/react'
   import { useState,  useEffect} from "react";
-  import { fetchCategories } from "../services/Categories";
+  import { createCategory, fetchCategories } from "../services/Categories";
   import Select from 'react-select';
+  import CategoryForm from './CategoryForm';
 
-export default function OperationForm({titleText, kindOfTransaction}) {
+export default function OperationForm({titleText, kindOfTransaction, onCreate}) {
 	const [options, setOptions] = useState([""]);
     const [transaction, setTransaction] = useState("");
 
 	const onSubmit = (e) => {
 		e.preventDefault();
-        console.log(transaction);
-		setTransaction(null);
-		// onCreate(transaction);
+		setTransaction({ ...transaction, amount: null })
+		onCreate(transaction);
 	};
 
 	useEffect(() => {
@@ -28,30 +28,44 @@ export default function OperationForm({titleText, kindOfTransaction}) {
               return arr.push({value: category.id, label: category.name});
             });
             setOptions(arr);
+			console.log("Options " + options.label);
             
           });
 	  };
 	  getData();
 	}, []);
-   
+
+	const onCreateCategory = async (category) =>{
+		await createCategory(category);
+		let result = await fetchCategories(kindOfTransaction);
+		const arr = [];
+		result.map((category) => {
+			arr.push({value: category.id, label: category.name});
+		  });
+		  setOptions(arr);
+	};
 
 	return (
-		<form onSubmit={onSubmit} className="w-full flex flex-col gap-3">
-			<Text fontSize='xl'>{titleText}</Text>
-			<Input
-				placeholder="Сумма"
-				value={transaction?.amount ?? ""}
-				onChange={(e) => setTransaction({ ...transaction, amount: e.target.value })}
-			/>
-			<Select 
-                value={options.label}
-                onChange={(e) => setTransaction({ ...transaction, categoryid: e.value })} //strange - must be e.target.value
-                options={options} />
+		<section className="w-full flex flex-row gap-3">
+			<form onSubmit={onSubmit} className="w-full flex flex-col gap-3">
+				<Text fontSize='xl'>{titleText}</Text>
+				<Input
+					placeholder="Сумма"
+					value={transaction?.amount ?? ""}
+					onChange={(e) => setTransaction({ ...transaction, amount: e.target.value })}
+				/>
+				<Select 
+					value={options.label}
+					onChange={(e) => setTransaction({ ...transaction, categoryid: e.value })} //strange - must be e.target.value
+					options={options} />
 
-			<Button type="submit" colorScheme="teal">
-				Создать
-			</Button>
-		</form>
+				<Button type="submit" colorScheme="teal">
+					Создать
+				</Button>
+			</form>
+			<CategoryForm onCreate={onCreateCategory}/>
+		</section>
+		
 		
 	);
 }
