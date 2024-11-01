@@ -41,7 +41,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
                 return Guid.Empty;
             }
 
-            balance.CurrentAmount = currentAmount;
+            balance.CurrentAmount += currentAmount;
 
             await _dbContext.SaveChangesAsync();
             return balance.Id;
@@ -65,7 +65,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
         {
             var balance = await _dbContext.Balances
                 .Include(b=>b.UserNavigation)
-                .FirstOrDefaultAsync(b => b.Id == id);
+                .FirstOrDefaultAsync(b => b.UserNavigation.Id == id);
             return balance;
         }
     }

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WalletAspNetCore.Api.DTO.Requests;
 using WalletAspNetCore.Api.DTO.Responses;
 using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories;
@@ -10,6 +12,7 @@ namespace WalletAspNetCore.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    
     public class TransactionsController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
@@ -35,12 +38,12 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Guid userId, decimal amount, Guid categoryId)
+        public async Task<IActionResult> Create([FromBody] CreateTransactionRequest transactionRequest)
         {
-            var user = await _userRepository.GetById(userId);
-            var category = await _categoryRepository.GetById(categoryId);
+            var user = await _userRepository.GetById(transactionRequest.UserId);
+            var category = await _categoryRepository.GetById(transactionRequest.CategoryId);
 
-            var transaction = await _transactionRepository.Create(user, category, amount);
+            var transaction = await _transactionRepository.Create(user, category, transactionRequest.Amount);
 
             await _balanceRepository.ApplyTransaction(user, transaction);
 
@@ -48,14 +51,17 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpGet]
+        //[Authorize]
         public async Task<IActionResult> GetAll(Guid id)
         {
             var transactions = await _transactionRepository.GetAll(id);
-            var transactionsResponse = transactions.Select(t => new TransactionsResponse(t.Id, t.Amount, t.OperationDate, t.CategoryNavigation.Name));
+            var transactionsResponse = transactions.Select(t => new TransactionResponse(t.Id, t.Amount, t.OperationDate.ToString("dd.MM.yyyy hh:mm:ss"), t.CategoryNavigation.Name));
 
             return Ok(transactionsResponse);
         }
 
+        [HttpGet]
+        [Route("selected")]
         public async Task<IActionResult> GetReportSelectedKindTransactions(Guid id, bool selectedKey)
         {
             Dictionary<Category, decimal> categoriesAmount = new Dictionary<Category, decimal>();

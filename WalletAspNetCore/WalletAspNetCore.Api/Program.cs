@@ -26,9 +26,21 @@ builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<TransactionRepository>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UsersService>();
+builder.Services.AddScoped<TransactionService>();
 
 builder.Services.AddScoped<IJwtProvider, JwtProvider>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins("http://localhost:5173");
+        policy.AllowAnyHeader();
+        policy.AllowAnyMethod();
+        policy.AllowAnyOrigin();
+    });
+});
 
 var app = builder.Build();
 
@@ -50,6 +62,7 @@ app.UseCookiePolicy(new CookiePolicyOptions
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseCors();
 app.MapControllers();
 
 app.Run();

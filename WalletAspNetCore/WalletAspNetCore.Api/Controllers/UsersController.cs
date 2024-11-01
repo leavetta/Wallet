@@ -32,9 +32,9 @@ namespace WalletAspNetCore.Api.Controllers
             UsersService usersService)
         {
             Balance balance =  await _balanceRepository.Create();
-            await usersService.Register(balance, registerUserRequest.Name, registerUserRequest.Email, registerUserRequest.Password);
+            var userId = await usersService.Register(balance, registerUserRequest.Name, registerUserRequest.Email, registerUserRequest.Password);
             
-            return Ok();
+            return Ok(userId);
         }
 
         [HttpPost]
@@ -44,8 +44,9 @@ namespace WalletAspNetCore.Api.Controllers
             UsersService usersService)
         {
             var token = await usersService.Login(loginUserRequest.Email, loginUserRequest.Password);
-            HttpContext.Response.Cookies.Append("secretCookie", token);
-            return Ok(token);
+            HttpContext.Response.Cookies.Append("secretCookie", token.Item1);
+            
+            return Ok(token.Item2);
         }
 
         [HttpGet]

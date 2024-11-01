@@ -3,12 +3,14 @@ using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories;
 using Microsoft.EntityFrameworkCore;
 using WalletAspNetCore.Api.DTO.Responses;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace WalletAspNetCore.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    //[Authorize]
     public class BalancesController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
@@ -22,7 +24,6 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpGet]
-        [Route("[action]")]
         public async Task<IActionResult> GetById(Guid id)
         {
             var balance = await _balanceRepository.GetByUserId(id);

@@ -21,14 +21,15 @@ namespace WalletAspNetCore.Services
             _jwtProvider = jwtProvider;
         }
 
-        public async Task Register(Balance balance, string name, string email, string password)
+        public async Task<User> Register(Balance balance, string name, string email, string password)
         {
             string hashedPassword = _passwordHasher.Generate(password);
 
             var user = await _userRepository.Create(balance, name, email, hashedPassword);
+            return user;
         }
 
-        public async Task<string> Login(string email, string password)
+        public async Task<(string, Guid)> Login(string email, string password)
         {
             var user = await _userRepository.GetByEmail(email);
             var result = _passwordHasher.Verify(password, user.Password);
@@ -39,7 +40,7 @@ namespace WalletAspNetCore.Services
             }
 
             var token = _jwtProvider.GenerateToken(user);
-            return token;
+            return (token, user.Id);
         }
     }
 }

@@ -1,10 +1,10 @@
 ﻿namespace WalletAspNetCore.Api.DTO.Responses
 {
-    public record TransactionsResponse
+    public record TransactionResponse
     (
         Guid id,
         decimal Amount,
-        DateTime OperationDate,
+        string OperationDate,
         string CategoryName
     );
 }

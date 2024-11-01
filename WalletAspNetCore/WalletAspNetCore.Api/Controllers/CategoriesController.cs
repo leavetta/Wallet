@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WalletAspNetCore.Api.DTO.Requests;
 using WalletAspNetCore.Api.DTO.Responses;
 using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories;
+using WalletAspNetCore.Models.Entities;
 
 namespace WalletAspNetCore.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    //[Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
@@ -20,7 +23,7 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCategoryRequest createCategoryRequest) 
+        public async Task<IActionResult> Create([FromBody]CreateCategoryRequest createCategoryRequest) 
         { 
             var category = await _categoryRepository.Create(createCategoryRequest.Name, createCategoryRequest.IsIncome);
             return Ok(category.Id);
@@ -33,6 +36,15 @@ namespace WalletAspNetCore.Api.Controllers
             var categoryResponse = new CategoriesResponse(category.Id, category.Name);
 
             return Ok(categoryResponse);
+        }
+
+        [HttpGet]
+        [Route("selected")]
+        public async Task<IActionResult> GetCategories(bool selectedKey)
+        {
+            var categories = await _categoryRepository.GetCategories(selectedKey);
+
+            return Ok(categories);
         }
     }
 }

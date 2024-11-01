@@ -45,6 +45,15 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return categories;
         }
 
+        public async Task<List<Category>> GetCategories(bool selectedKey)
+        {
+            var categories = await _dbContext.Categories
+                .Where(c => c.IsIncome == selectedKey)
+
+                .ToListAsync();
+            return categories;
+        }
+
         public async Task<Category> Delete(Category category)
         {
             _dbContext.Categories.Remove(category);
