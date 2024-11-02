@@ -3,7 +3,7 @@ import {
 	StatLabel,
 	StatNumber,
 	Divider,
-	// Box,
+	Text,
   } from '@chakra-ui/react'
 import { useState,  useEffect} from "react";
 import OperationForm from './OperationForm';
@@ -66,18 +66,22 @@ export default function HomePage() {
 				{/* <Box className="flex flex-col">
 					
 				</Box> */}
+				<div className="flex flex-col gap-4 p-8">
+					<Text fontSize='xl' bg='teal' color='white'>История операций</Text>
+					{/* <Divider size='xl' borderWidth="2px" borderColor={"gray"} /> */}
+					<ul className="flex flex-col gap-5">
+						{transactions.map((t) => (
+							<li key={t.id}>
+								<Transaction
+									amount={t.amount}
+									createdAt={t.operationDate}
+									categoryName={t.categoryName}
+								/>
+							</li>
+						))}
+					</ul> 
+				</div>
 				
-				<ul className="flex flex-col gap-5 w-1/2">
-					{transactions.map((t) => (
-						<li key={t.id}>
-							<Transaction
-								amount={t.amount}
-								createdAt={t.operationDate}
-								categoryName={t.categoryName}
-							/>
-						</li>
-					))}
-				</ul> 
 				
 				
 			</section>
