@@ -36,7 +36,7 @@ export default function OperationForm({titleText, kindOfTransaction, onCreate}) 
 	}, []);
 
 	const onCreateCategory = async (category) =>{
-		await createCategory(category);
+		await createCategory(category, kindOfTransaction);
 		let result = await fetchCategories(kindOfTransaction);
 		const arr = [];
 		result.map((category) => {
@@ -48,7 +48,7 @@ export default function OperationForm({titleText, kindOfTransaction, onCreate}) 
 	return (
 		<section className="w-full flex flex-row gap-3">
 			<form onSubmit={onSubmit} className="w-full flex flex-col gap-3">
-				<Text fontSize='xl'>{titleText}</Text>
+			<Text fontSize='xl'>{titleText}</Text>
 				<Input
 					placeholder="Сумма"
 					value={transaction?.amount ?? ""}

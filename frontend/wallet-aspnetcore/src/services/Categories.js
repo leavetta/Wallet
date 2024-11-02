@@ -3,11 +3,15 @@ import axios from "axios";
 
 export const createCategory = async (category, isDeposit) => {
 	try {
+		console.log(category.name);
+		console.log(isDeposit);
+		const params = new URLSearchParams();
+		params.append('name', category.name);
+		params.append('isIncome', isDeposit);
 		var response = await axios.post("https://localhost:7242/categories", {
-			params:{
-				name: category.name,
-				isIncome: isDeposit,
-			}});
+			name: category.name,
+			isIncome: isDeposit
+		});
 		return response.data;
 	} catch (e) {
 		console.error(e);
