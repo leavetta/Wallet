@@ -14,9 +14,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решен
 		docker-compose.yml = docker-compose.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletAspNetCore.Services", "WalletAspNetCore.Services\WalletAspNetCore.Services.csproj", "{DCCB56D6-F50E-4BC0-9C0D-CAF090FBE08B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletAspNetCore.Services", "WalletAspNetCore.Services\WalletAspNetCore.Services.csproj", "{DCCB56D6-F50E-4BC0-9C0D-CAF090FBE08B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletAspNetCore.Auth", "WalletAspNetCore.Auth\WalletAspNetCore.Auth.csproj", "{ECA67C41-1545-45B4-9901-F7242E2553EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletAspNetCore.Auth", "WalletAspNetCore.Auth\WalletAspNetCore.Auth.csproj", "{ECA67C41-1545-45B4-9901-F7242E2553EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseOperations.Tests", "DatabaseOperations.Tests\DatabaseOperations.Tests.csproj", "{305C8DB8-F783-455D-9E6C-00B991F2EB9A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,6 +46,10 @@ Global
 		{ECA67C41-1545-45B4-9901-F7242E2553EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECA67C41-1545-45B4-9901-F7242E2553EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECA67C41-1545-45B4-9901-F7242E2553EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{305C8DB8-F783-455D-9E6C-00B991F2EB9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{305C8DB8-F783-455D-9E6C-00B991F2EB9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{305C8DB8-F783-455D-9E6C-00B991F2EB9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{305C8DB8-F783-455D-9E6C-00B991F2EB9A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
