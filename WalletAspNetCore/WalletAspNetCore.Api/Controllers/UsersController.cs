@@ -50,7 +50,6 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetById(Guid id)
         {
             var user = await _userRepository.GetById(id);

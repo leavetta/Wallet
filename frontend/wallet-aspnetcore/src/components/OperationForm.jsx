@@ -3,7 +3,7 @@ import {
     Input,
     Text
   } from '@chakra-ui/react'
-  import { useState,  useEffect} from "react";
+  import { useState} from "react";
   import { createCategory, fetchCategories } from "../services/Categories";
   import Select from 'react-select';
   import CategoryForm from './CategoryForm';
@@ -17,23 +17,6 @@ export default function OperationForm({titleText, kindOfTransaction, onCreate}) 
 		setTransaction({ ...transaction, amount: null })
 		onCreate(transaction);
 	};
-
-	useEffect(() => {
-	  const getData = async () => {
-        
-		const arr = [];
-        await fetchCategories(kindOfTransaction).then((res) => {
-            let result = res;
-            result.map((category) => {
-              return arr.push({value: category.id, label: category.name});
-            });
-            setOptions(arr);
-			console.log("Options " + options.label);
-            
-          });
-	  };
-	  getData();
-	}, []);
 
 	const onCreateCategory = async (category) =>{
 		await createCategory(category, kindOfTransaction);
@@ -63,7 +46,7 @@ export default function OperationForm({titleText, kindOfTransaction, onCreate}) 
 					Создать
 				</Button>
 			</form>
-			<CategoryForm onCreate={onCreateCategory}/>
+			<CategoryForm onCreate={onCreateCategory} options={options} setOptions={setOptions} kindOfTransaction={kindOfTransaction}/>
 		</section>
 		
 		

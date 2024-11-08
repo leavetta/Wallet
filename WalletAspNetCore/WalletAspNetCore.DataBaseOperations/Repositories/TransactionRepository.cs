@@ -23,6 +23,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
                 .Include(u => u.UserNavigation)
                 .Where(u => u.UserNavigation.Id == id)
                 .Include(c => c.CategoryNavigation)
+                .OrderByDescending(t => t.OperationDate)
                 
                 .AsNoTracking()
                 .ToListAsync();
@@ -73,6 +74,20 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             await _dbContext.SaveChangesAsync();
 
             return transaction;
+        }
+
+        public async Task<List<Transaction>> GetTransactionsOfRangeDate(Guid userId, DateTime startDate, DateTime endDate)
+        {
+            var userTransactions = await _dbContext.Transactions
+                .Include(u => u.UserNavigation)
+                .Where(u => u.UserNavigation.Id == userId)
+                .Include(c => c.CategoryNavigation)
+                .Where(c => c.OperationDate.Date >= startDate.Date && c.OperationDate.Date <= endDate.Date)
+                .OrderByDescending(t => t.OperationDate)
+                .AsNoTracking()
+                .ToListAsync();
+
+            return userTransactions;
         }
     }
 }

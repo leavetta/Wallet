@@ -1,19 +1,24 @@
 import { Button, Input} from "@chakra-ui/react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom"
+import { loginUser } from "../services/Users";
 
-
-export default function LoginForm({ onLogin }) {
+export default function LoginForm() {
     const [user, setUser] = useState();
     const navigate = useNavigate();
 
 
     const onSubmit = (e) => {
         e.preventDefault();
+
+		const onLogin = async (user) => {
+			await loginUser(user).then(() => {
+				navigate("/home");
+				});
+		};
         console.log("Была нажата кнопка");
         setUser(null);
 		onLogin(user);
-        navigate("/home");
     };
 
 	return (

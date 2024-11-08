@@ -4,10 +4,11 @@ import {
     // useDisclosure,
     Fade,
   } from '@chakra-ui/react'
-  import { useState} from "react";
+  import { useState, useEffect} from "react";
+  import { fetchCategories } from "../services/Categories";
 
 
-export default function OperationForm({ onCreate }) {
+export default function OperationForm({ onCreate, setOptions,  kindOfTransaction}) {
     const [category, setCategory] = useState("");
     // const { isOpen, onToggle, onClose } = useDisclosure();
     const [isButtonDisabled, setButtonDisabled] = useState(true);
@@ -23,6 +24,23 @@ export default function OperationForm({ onCreate }) {
 		setCategory(null);
 		onCreate(category);
 	};
+
+    useEffect(() => {
+        const getData = async () => {
+          
+          const arr = [];
+          await fetchCategories(kindOfTransaction).then((res) => {
+              let result = res;
+              result.map((category) => {
+                return arr.push({value: category.id, label: category.name});
+              });
+              setOptions(arr);
+            //   console.log("Options " + options.label);
+              
+            });
+        };
+        getData();
+      }, [category, kindOfTransaction, setOptions]);
 
 	return (
 		<form onSubmit={onSubmit} className="w-full flex flex-col gap-3">

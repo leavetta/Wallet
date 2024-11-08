@@ -1,18 +1,20 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 using WalletAspNetCore.Api.DTO.Requests;
 using WalletAspNetCore.Api.DTO.Responses;
 using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories;
 using WalletAspNetCore.Models.Entities;
 using WalletAspNetCore.Services;
+using System;
 
 
 namespace WalletAspNetCore.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    
+    //[Authorize]
     public class TransactionsController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
@@ -51,10 +53,9 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpGet]
-        //[Authorize]
-        public async Task<IActionResult> GetAll(Guid id)
+        public async Task<IActionResult> GetTransactions(Guid id, DateTime? startDate, DateTime? endDate)
         {
-            var transactions = await _transactionRepository.GetAll(id);
+            var transactions = await _transactionService.GetTransactions(id, startDate, endDate);
             var transactionsResponse = transactions.Select(t => new TransactionResponse(t.Id, t.Amount, t.OperationDate.ToString("dd.MM.yyyy hh:mm:ss"), t.CategoryNavigation.Name));
 
             return Ok(transactionsResponse);

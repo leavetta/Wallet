@@ -7,11 +7,11 @@ const ProtectedRoute = () => {
   };
 
   const navigate = () => {
-    alert('You are unauthorised to access this. Please sign in')
-     window.location="/login";
+    alert('You are unauthorised to access this. Please sign in');
+    window.location="/login";
   }
 
-const isAuth = useAuth();
+  const isAuth = useAuth();
   return (
       isAuth ? (<Outlet /> ) : navigate()
   )

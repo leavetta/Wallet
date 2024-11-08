@@ -8,6 +8,7 @@ import {
 import { useState,  useEffect} from "react";
 import OperationForm from './OperationForm';
 import Transaction from './Transaction';
+import DateFilter from './DateFilter';
 import {fetchTransactions, createTransaction} from '../services/Transactions';
 import { getCurrentUser } from "../services/Users";
 import { fetchBalance } from '../services/Balance';
@@ -16,13 +17,15 @@ export default function HomePage() {
 	const [transactions, setTransactions] = useState();
 	const [balance, setBalance] = useState();
 	const [loaded, setLoaded] = useState(false);
+	const [startDate, setStartDate] = useState(null);
+	const [endDate, setEndDate] = useState(null);
 
 	useEffect(() => {
 		const fetchData = async () => {
 			let userId = getCurrentUser();
 			try
 			{
-				let transactions = await fetchTransactions(userId);
+				let transactions = await fetchTransactions(userId, startDate, endDate);
 				setTransactions(transactions);
 				console.log(transactions);
 				let balance = await fetchBalance(userId);
@@ -37,11 +40,11 @@ export default function HomePage() {
 		};
 		fetchData();
 		
-	}, []);
+	}, [startDate, endDate]);
 
 	const onCreate = async (transaction) => {
 		await createTransaction(transaction);
-		let transactions = await fetchTransactions(getCurrentUser());
+		let transactions = await fetchTransactions(getCurrentUser(), startDate, endDate);
 		setTransactions(transactions);
 		let balance = await fetchBalance(getCurrentUser());
 		setBalance(balance);
@@ -51,7 +54,7 @@ export default function HomePage() {
 	if (loaded) {
 		return (
 			<section className="p-8 flex flex-row justify-start items-start gap-12">
-				<div className="p-8">
+				<div className="p-8 w-full" >
 					<Stat>
 						<StatLabel fontSize='xl'>Баланс</StatLabel>
 						<StatNumber>{balance} Руб.</StatNumber>
@@ -82,7 +85,7 @@ export default function HomePage() {
 					</ul> 
 				</div>
 				
-				
+				<DateFilter startDate={startDate} setStartDate={setStartDate} endDate={endDate} setEndDate={setEndDate}/>
 				
 			</section>
 			

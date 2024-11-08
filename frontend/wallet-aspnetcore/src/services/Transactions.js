@@ -12,13 +12,14 @@ export const createTransaction = async (transaction) => {
 	}
 };
 
-export const fetchTransactions = async (userId) => {
+export const fetchTransactions = async (userId, startDate, endDate) => { //todo: convert startDate and endDate to normal time and date
 	try {
 		var response = await axios.get("https://localhost:7242/transactions", {
 			params: {
 				id: userId,
+				startDate: startDate,
+				endDate: endDate
 			},
-
 		});
         
 		return response.data;
@@ -26,4 +27,3 @@ export const fetchTransactions = async (userId) => {
 		console.error(e);
 	}
 };
-
