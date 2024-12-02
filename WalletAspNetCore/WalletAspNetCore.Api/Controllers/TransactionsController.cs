@@ -8,13 +8,16 @@ using WalletAspNetCore.DataBaseOperations.Repositories;
 using WalletAspNetCore.Models.Entities;
 using WalletAspNetCore.Services;
 using System;
+using Microsoft.Net.Http.Headers;
+using System.IdentityModel.Tokens.Jwt;
+using WalletAspNetCore.Auth;
 
 
 namespace WalletAspNetCore.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    //[Authorize]
+    [Authorize]
     public class TransactionsController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;
@@ -23,13 +26,15 @@ namespace WalletAspNetCore.Api.Controllers
         private readonly CategoryRepository _categoryRepository;
         private readonly BalanceRepository _balanceRepository;
         private readonly TransactionService _transactionService;
+        private readonly JwtParser _jwtParser;
 
         public TransactionsController(ApplicationDbContext dbContext, 
             TransactionRepository transactionRepository, 
             UserRepository userRepository, 
             CategoryRepository categoryRepository,
             BalanceRepository balanceRepository,
-            TransactionService transactionService)
+            TransactionService transactionService,
+            JwtParser jwtParser)
         {
             _dbContext = dbContext;
             _transactionRepository = transactionRepository;
@@ -37,28 +42,49 @@ namespace WalletAspNetCore.Api.Controllers
             _categoryRepository = categoryRepository;
             _balanceRepository = balanceRepository;
             _transactionService = transactionService;
+            _jwtParser = jwtParser;
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateTransactionRequest transactionRequest)
         {
-            var user = await _userRepository.GetById(transactionRequest.UserId);
-            var category = await _categoryRepository.GetById(transactionRequest.CategoryId);
+            try
+            {
+                var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+                Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-            var transaction = await _transactionRepository.Create(user, category, transactionRequest.Amount);
+                var user = await _userRepository.GetById(userId);
+                var category = await _categoryRepository.GetById(transactionRequest.CategoryId);
 
-            await _balanceRepository.ApplyTransaction(user, transaction);
+                var transaction = await _transactionRepository.Create(user, category, transactionRequest.Amount);
 
-            return Ok(transaction.Id);
+                await _balanceRepository.ApplyTransaction(user, transaction);
+
+                return Ok(transaction.Id);
+            }
+            catch
+            {
+                return Unauthorized("Пользователь не залогинился");
+            }
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTransactions(Guid id, DateTime? startDate, DateTime? endDate)
+        public async Task<IActionResult> GetTransactions(DateTime? startDate, DateTime? endDate)
         {
-            var transactions = await _transactionService.GetTransactions(id, startDate, endDate);
-            var transactionsResponse = transactions.Select(t => new TransactionResponse(t.Id, t.Amount, t.OperationDate.ToString("dd.MM.yyyy hh:mm:ss"), t.CategoryNavigation.Name));
+            try
+            {
+                var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+                Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-            return Ok(transactionsResponse);
+                var transactions = await _transactionService.GetTransactions(userId, startDate, endDate);
+                var transactionsResponse = transactions.Select(t => new TransactionResponse(t.Id, t.Amount, t.OperationDate.ToString("dd.MM.yyyy hh:mm:ss"), t.CategoryNavigation.Name));
+
+                return Ok(transactionsResponse);
+            }
+            catch
+            {
+                return Unauthorized("Пользователь не залогинился");
+            }
         }
 
         [HttpGet]

@@ -9,12 +9,12 @@ namespace WalletAspNetCore.Services
     {
         private readonly IPasswordHasher _passwordHasher;
         private readonly UserRepository _userRepository;
-        private readonly IJwtProvider _jwtProvider;
+        private readonly IJwtService _jwtProvider;
 
         public UsersService(
             IPasswordHasher passwordHasher, 
             UserRepository userRepository,
-            IJwtProvider jwtProvider)
+            IJwtService jwtProvider)
         {
             _passwordHasher = passwordHasher;
             _userRepository = userRepository;
