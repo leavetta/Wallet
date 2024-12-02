@@ -10,7 +10,7 @@ namespace WalletAspNetCore.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    //[Authorize]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ApplicationDbContext _dbContext;

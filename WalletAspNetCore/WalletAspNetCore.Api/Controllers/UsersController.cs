@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
+using System.IdentityModel.Tokens.Jwt;
 using WalletAspNetCore.Api.DTO.Requests;
 using WalletAspNetCore.Api.DTO.Responses;
+using WalletAspNetCore.Auth;
 using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories;
 using WalletAspNetCore.Models.Entities;
@@ -17,12 +20,14 @@ namespace WalletAspNetCore.Api.Controllers
         private readonly ApplicationDbContext _dbContext;
         private readonly UserRepository _userRepository;
         private readonly BalanceRepository _balanceRepository;
+        private readonly JwtParser _jwtParser;
 
-        public UsersController(ApplicationDbContext dbContext, UserRepository userRepository, BalanceRepository balanceRepository)
+        public UsersController(ApplicationDbContext dbContext, UserRepository userRepository, BalanceRepository balanceRepository, JwtParser jwtParser)
         {
             _dbContext = dbContext;
             _userRepository = userRepository;
             _balanceRepository = balanceRepository;
+            _jwtParser = jwtParser;
         }
 
         [HttpPost]
@@ -44,18 +49,29 @@ namespace WalletAspNetCore.Api.Controllers
             UsersService usersService)
         {
             var token = await usersService.Login(loginUserRequest.Email, loginUserRequest.Password);
-            HttpContext.Response.Cookies.Append("secretCookie", token.Item1);
+            //HttpContext.Response.Cookies.Append("secretCookie", token.Item1);
             
-            return Ok(token.Item2);
+            return Ok(token.Item1);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id)
+        [Authorize]
+        public async Task<IActionResult> GetById()
         {
-            var user = await _userRepository.GetById(id);
-            var userResponse = new UsersResponse(user.Id, user.Name, user.Email, user.Password);
+            try
+            {
+                var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+                Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-            return Ok(userResponse);
+                var user = await _userRepository.GetById(userId);
+                var userResponse = new UsersResponse(user.Id, user.Name, user.Email, user.Password);
+
+                return Ok(userResponse);
+            }
+            catch
+            {
+                return Unauthorized("Пользователь не залогинился");
+            }
         }
 
     }
