@@ -13,7 +13,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Category> Create(string name, bool isIncome)
+        public async Task<Category> CreateAsync(string name, bool isIncome)
         {
             Category category = new()
             {
@@ -27,7 +27,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return category;
         }
 
-        public async Task<Category?> GetById(Guid id)
+        public async Task<Category?> GetByIdAsync(Guid id)
         {
             var category = await _dbContext.Categories
                 //.Include(c=>c.Transactions)
@@ -35,7 +35,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return category;
         }
 
-        public async Task<List<Category>> GetSelectedCategories(Guid userId, bool selectedKey)
+        public async Task<List<Category>> GetSelectedCategoriesAsync(Guid userId, bool selectedKey)
         {
             var categories = await _dbContext.Categories
                 .Include(c => c.Transactions.Where(u => u.UserNavigation.Id == userId))
@@ -46,7 +46,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return categories;
         }
 
-        public async Task<List<Category>> GetCategories(bool selectedKey)
+        public async Task<List<Category>> GetCategoriesAsync(bool selectedKey)
         {
             var categories = await _dbContext.Categories
                 .Where(c => c.IsIncome == selectedKey)
@@ -55,7 +55,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return categories;
         }
 
-        public async Task<Category> Delete(Category category)
+        public async Task<Category> DeleteAsync(Category category)
         {
             _dbContext.Categories.Remove(category);
 

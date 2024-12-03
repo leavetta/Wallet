@@ -33,7 +33,7 @@ namespace WalletAspNetCore.Api.Controllers
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                var transactionId = await _transactionService.Create(userId, transactionRequest.CategoryId, transactionRequest.Amount);
+                var transactionId = await _transactionService.CreateAsync(userId, transactionRequest.CategoryId, transactionRequest.Amount);
 
                 return Ok(transactionId);
             }
@@ -51,7 +51,7 @@ namespace WalletAspNetCore.Api.Controllers
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                var transactions = await _transactionService.GetTransactions(userId, startDate, endDate);
+                var transactions = await _transactionService.GetTransactionsAsync(userId, startDate, endDate);
                 var transactionsResponse = transactions.Select(t => new TransactionResponse(t.Id, t.Amount, t.OperationDate.ToString("dd.MM.yyyy hh:mm:ss"), t.CategoryNavigation.Name));
 
                 return Ok(transactionsResponse);
@@ -71,7 +71,7 @@ namespace WalletAspNetCore.Api.Controllers
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                var categoriesAmount = await _transactionService.GetReportSelectedKindTransactions(userId, selectedKey);
+                var categoriesAmount = await _transactionService.GetReportSelectedKindTransactionsAsync(userId, selectedKey);
 
                 return Ok(categoriesAmount);
             }

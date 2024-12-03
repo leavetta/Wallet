@@ -1,7 +1,7 @@
 ﻿using WalletAspNetCore.Auth;
 using WalletAspNetCore.Models.Entities;
-using WalletAspNetCore.DataBaseOperations.Repositories;
 using WalletAspNetCore.Services.Interfaces;
+using WalletAspNetCore.DataBaseOperations.Repositories.Interfaces;
 
 
 namespace WalletAspNetCore.Services
@@ -9,14 +9,14 @@ namespace WalletAspNetCore.Services
     public class AuthService : IAuthService
     {
         private readonly IPasswordHasher _passwordHasher;
-        private readonly UserRepository _userRepository;
-        private readonly BalanceRepository _balanceRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IBalanceRepository _balanceRepository;
         private readonly IJwtService _jwtProvider;
 
         public AuthService(
             IPasswordHasher passwordHasher,
-            UserRepository userRepository,
-            BalanceRepository balanceRepository,
+            IUserRepository userRepository,
+            IBalanceRepository balanceRepository,
             IJwtService jwtProvider)
         {
             _passwordHasher = passwordHasher;
@@ -26,19 +26,19 @@ namespace WalletAspNetCore.Services
 
         }
 
-        public async Task<User> Register(string name, string email, string password)
+        public async Task<User> RegisterAsync(string name, string email, string password)
         {
-            Balance balance = await _balanceRepository.Create();
+            Balance balance = await _balanceRepository.CreateAsync();
 
             string hashedPassword = _passwordHasher.Generate(password);
 
-            var user = await _userRepository.Create(balance, name, email, hashedPassword);
+            var user = await _userRepository.CreateAsync(balance, name, email, hashedPassword);
             return user;
         }
 
-        public async Task<string> Login(string email, string password)
+        public async Task<string> LoginAsync(string email, string password)
         {
-            var user = await _userRepository.GetByEmail(email);
+            var user = await _userRepository.GetByEmailAsync(email);
             var result = _passwordHasher.Verify(password, user.Password);
 
             if (result == false)

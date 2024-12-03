@@ -13,7 +13,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<User> GetById(Guid id)
+        public async Task<User> GetByIdAsync(Guid id)
         {
             var userEntity = await _dbContext.Users
                 .Include(u => u.BalanceNavigation)
@@ -22,7 +22,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return userEntity;
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<User> GetByEmailAsync(string email)
         {
             var userEntity = await _dbContext.Users
                 .AsNoTracking()
@@ -37,7 +37,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
 
         //}
 
-        public async Task<User> Create(Balance balance, string name, string email, string password)
+        public async Task<User> CreateAsync(Balance balance, string name, string email, string password)
         {
             User user = new()
             {

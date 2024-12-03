@@ -13,7 +13,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<Guid> ApplyTransaction(User user, Transaction transaction)
+        public async Task<Guid> ApplyTransactionAsync(User user, Transaction transaction)
         {
             var balance = await _dbContext.Balances
                 .Include(b => b.UserNavigation)
@@ -30,7 +30,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return balance.Id;
         }
 
-        public async Task<Guid> Update(Guid userId, decimal currentAmount)
+        public async Task<Guid> UpdateAsync(Guid userId, decimal currentAmount)
         {
             var balance = await _dbContext.Balances
                 .Include(b => b.UserNavigation)
@@ -47,7 +47,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return balance.Id;
         }
 
-        public async Task<Balance> Create()
+        public async Task<Balance> CreateAsync()
         {
             Balance balance = new()
             {
@@ -61,7 +61,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return balance;
         }
 
-        public async Task<Balance> GetByUserId(Guid id)
+        public async Task<Balance> GetByUserIdAsync(Guid id)
         {
             var balance = await _dbContext.Balances
                 .Include(b => b.UserNavigation)

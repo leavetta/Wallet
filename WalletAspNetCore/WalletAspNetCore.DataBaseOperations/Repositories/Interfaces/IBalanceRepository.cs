@@ -1,12 +1,12 @@
 ﻿using WalletAspNetCore.Models.Entities;
 
-namespace WalletAspNetCore.DataBaseOperations.Repositories
+namespace WalletAspNetCore.DataBaseOperations.Repositories.Interfaces
 {
     public interface IBalanceRepository
     {
-        Task<Guid> ApplyTransaction(User user, Transaction transaction);
-        Task<Balance> Create();
-        Task<Balance> GetByUserId(Guid id);
-        Task<Guid> Update(Guid userId, decimal currentAmount);
+        Task<Guid> ApplyTransactionAsync(User user, Transaction transaction);
+        Task<Balance> CreateAsync();
+        Task<Balance> GetByUserIdAsync(Guid id);
+        Task<Guid> UpdateAsync(Guid userId, decimal currentAmount);
     }
 }

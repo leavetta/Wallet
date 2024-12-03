@@ -4,8 +4,8 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories.Interfaces
 {
     public interface ITransactionRepository
     {
-        Task<Transaction> Create(User user, Category category, decimal amount);
-        Task<List<Transaction>> GetAll(Guid id);
-        Task<List<Transaction>> GetTransactionsOfRangeDate(Guid userId, DateTime startDate, DateTime endDate);
+        Task<Transaction> CreateAsync(User user, Category category, decimal amount);
+        Task<List<Transaction>> GetAllAsync(Guid id);
+        Task<List<Transaction>> GetTransactionsOfRangeDateAsync(Guid userId, DateTime startDate, DateTime endDate);
     }
 }

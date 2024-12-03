@@ -1,4 +1,4 @@
-﻿using WalletAspNetCore.DataBaseOperations.Repositories;
+﻿using WalletAspNetCore.DataBaseOperations.Repositories.Interfaces;
 using WalletAspNetCore.Models.Entities;
 using WalletAspNetCore.Services.Interfaces;
 
@@ -6,19 +6,18 @@ namespace WalletAspNetCore.Services
 {
     public class UsersService : IUsersService
     {
-        private readonly UserRepository _userRepository;
+        private readonly IUserRepository _userRepository;
 
-        public UsersService(UserRepository userRepository)
+        public UsersService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
 
-        public async Task<User> GetUserById(Guid userId)
+        public async Task<User> GetUserByIdAsync(Guid userId)
         {
-            var user = await _userRepository.GetById(userId);
+            var user = await _userRepository.GetByIdAsync(userId);
 
             return user;
-
         }
     }
 }

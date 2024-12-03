@@ -32,7 +32,7 @@ namespace WalletAspNetCore.Api.Controllers
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                var balance = await _balanceService.GetByUserId(userId);
+                var balance = await _balanceService.GetByUserIdAsync(userId);
 
                 if (balance == null)
                 {
@@ -57,7 +57,7 @@ namespace WalletAspNetCore.Api.Controllers
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                var balanceId = await _balanceService.UpdateBalance(userId, currentAmount);
+                var balanceId = await _balanceService.UpdateBalanceAsync(userId, currentAmount);
 
                 return Ok(balanceId);
             }

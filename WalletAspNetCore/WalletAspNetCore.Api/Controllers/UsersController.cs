@@ -27,7 +27,7 @@ namespace WalletAspNetCore.Api.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserRequest registerUserRequest)
         {
-            var userId = await _authService.Register(registerUserRequest.Name, registerUserRequest.Email, registerUserRequest.Password);
+            var userId = await _authService.RegisterAsync(registerUserRequest.Name, registerUserRequest.Email, registerUserRequest.Password);
             
             return Ok(userId);
         }
@@ -36,7 +36,7 @@ namespace WalletAspNetCore.Api.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserRequest loginUserRequest)
         {
-            var token = await _authService.Login(loginUserRequest.Email, loginUserRequest.Password);
+            var token = await _authService.LoginAsync(loginUserRequest.Email, loginUserRequest.Password);
             //HttpContext.Response.Cookies.Append("secretCookie", token.Item1);
             
             return Ok(token);
@@ -51,7 +51,7 @@ namespace WalletAspNetCore.Api.Controllers
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                var user = await _userService.GetUserById(userId);
+                var user = await _userService.GetUserByIdAsync(userId);
                 var userResponse = new UsersResponse(user.Id, user.Name, user.Email, user.Password);
 
                 return Ok(userResponse);

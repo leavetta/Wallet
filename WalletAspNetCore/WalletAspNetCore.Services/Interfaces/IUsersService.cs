@@ -4,6 +4,6 @@ namespace WalletAspNetCore.Services.Interfaces
 {
     public interface IUsersService
     {
-        Task<User> GetUserById(Guid userId);
+        Task<User> GetUserByIdAsync(Guid userId);
     }
 }

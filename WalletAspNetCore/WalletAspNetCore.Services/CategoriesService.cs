@@ -1,4 +1,4 @@
-﻿using WalletAspNetCore.DataBaseOperations.Repositories;
+﻿using WalletAspNetCore.DataBaseOperations.Repositories.Interfaces;
 using WalletAspNetCore.Models.Entities;
 using WalletAspNetCore.Services.Interfaces;
 
@@ -6,28 +6,28 @@ namespace WalletAspNetCore.Services
 {
     public class CategoriesService : ICategoriesService
     {
-        private readonly CategoryRepository _categoryRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public CategoriesService(CategoryRepository categoryRepository)
+        public CategoriesService(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Guid> CreateCategory(string cateoryName, bool isIncome)
+        public async Task<Guid> CreateCategoryAsync(string cateoryName, bool isIncome)
         {
-            var category = await _categoryRepository.Create(cateoryName, isIncome);
+            var category = await _categoryRepository.CreateAsync(cateoryName, isIncome);
             return category.Id;
         }
 
-        public async Task<Category> GetCategoryById(Guid categoryId)
+        public async Task<Category> GetCategoryByIdAsync(Guid categoryId)
         {
-            var category = await _categoryRepository.GetById(categoryId);
+            var category = await _categoryRepository.GetByIdAsync(categoryId);
             return category;
         }
 
-        public async Task<List<Category>> GetSelectedCategories(bool selectedKey)
+        public async Task<List<Category>> GetSelectedCategoriesAsync(bool selectedKey)
         {
-            var categories = await _categoryRepository.GetCategories(selectedKey);
+            var categories = await _categoryRepository.GetCategoriesAsync(selectedKey);
 
             return categories;
         }

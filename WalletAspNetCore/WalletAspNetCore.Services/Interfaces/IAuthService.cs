@@ -1,10 +1,10 @@
 ﻿using WalletAspNetCore.Models.Entities;
 
-namespace WalletAspNetCore.Services
+namespace WalletAspNetCore.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<string> Login(string email, string password);
-        Task<User> Register(string name, string email, string password);
+        Task<string> LoginAsync(string email, string password);
+        Task<User> RegisterAsync(string name, string email, string password);
     }
 }

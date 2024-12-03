@@ -13,7 +13,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<Transaction>> GetAll(Guid id)
+        public async Task<List<Transaction>> GetAllAsync(Guid id)
         {
             var userTransactions = await _dbContext.Transactions
                 .Include(u => u.UserNavigation)
@@ -53,7 +53,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
         //    return userTransactions;
         //}
 
-        public async Task<Transaction> Create(User user, Category category, decimal amount)
+        public async Task<Transaction> CreateAsync(User user, Category category, decimal amount)
         {
             Transaction transaction = new()
             {
@@ -72,7 +72,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return transaction;
         }
 
-        public async Task<List<Transaction>> GetTransactionsOfRangeDate(Guid userId, DateTime startDate, DateTime endDate)
+        public async Task<List<Transaction>> GetTransactionsOfRangeDateAsync(Guid userId, DateTime startDate, DateTime endDate)
         {
             var userTransactions = await _dbContext.Transactions
                 .Include(u => u.UserNavigation)

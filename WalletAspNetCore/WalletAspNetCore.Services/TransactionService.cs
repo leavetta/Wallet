@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using WalletAspNetCore.DataBaseOperations.Repositories;
+using WalletAspNetCore.DataBaseOperations.Repositories.Interfaces;
 using WalletAspNetCore.Models.Entities;
 using WalletAspNetCore.Services.Interfaces;
 
@@ -7,16 +7,16 @@ namespace WalletAspNetCore.Services
 {
     public class TransactionService : ITransactionService
     {
-        private readonly TransactionRepository _transactionRepository;
-        private readonly UserRepository _userRepository;
-        private readonly CategoryRepository _categoryRepository;
-        private readonly BalanceRepository _balanceRepository;
+        private readonly ITransactionRepository _transactionRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly ICategoryRepository _categoryRepository;
+        private readonly IBalanceRepository _balanceRepository;
 
         public TransactionService(
-            TransactionRepository transactionRepository,
-            UserRepository userRepository,
-            CategoryRepository categoryRepository,
-            BalanceRepository balanceRepository)
+            ITransactionRepository transactionRepository,
+            IUserRepository userRepository,
+            ICategoryRepository categoryRepository,
+            IBalanceRepository balanceRepository)
         {
             _transactionRepository = transactionRepository;
             _userRepository = userRepository;
@@ -24,23 +24,23 @@ namespace WalletAspNetCore.Services
             _balanceRepository = balanceRepository;
         }
 
-        public async Task<Guid> Create(Guid userId, Guid categoryId, decimal amount)
+        public async Task<Guid> CreateAsync(Guid userId, Guid categoryId, decimal amount)
         {
-            var user = await _userRepository.GetById(userId);
-            var category = await _categoryRepository.GetById(categoryId);
+            var user = await _userRepository.GetByIdAsync(userId);
+            var category = await _categoryRepository.GetByIdAsync(categoryId);
 
-            var transaction = await _transactionRepository.Create(user, category, amount);
+            var transaction = await _transactionRepository.CreateAsync(user, category, amount);
 
-            await _balanceRepository.ApplyTransaction(user, transaction);
+            await _balanceRepository.ApplyTransactionAsync(user, transaction);
 
             return transaction.Id;
         }
 
-        public async Task<Dictionary<Category, decimal>> GetReportSelectedKindTransactions(Guid userId, bool selectedKey)
+        public async Task<Dictionary<Category, decimal>> GetReportSelectedKindTransactionsAsync(Guid userId, bool selectedKey)
         {
             Dictionary<Category, decimal> categoriesAmount = new Dictionary<Category, decimal>();
 
-            var categories = await _categoryRepository.GetSelectedCategories(userId, selectedKey);
+            var categories = await _categoryRepository.GetSelectedCategoriesAsync(userId, selectedKey);
 
             foreach (var category in categories)
             {
@@ -67,22 +67,22 @@ namespace WalletAspNetCore.Services
         //    return amount;
         //}
 
-        public async Task<List<Transaction>> GetTransactions(Guid userId, DateTime? startDate, DateTime? endDate)
+        public async Task<List<Transaction>> GetTransactionsAsync(Guid userId, DateTime? startDate, DateTime? endDate)
         {
             if (startDate == null)
             {
-                return await _transactionRepository.GetAll(userId);
+                return await _transactionRepository.GetAllAsync(userId);
             }
             DateTime notNullStartDate = (DateTime)startDate;
 
             if (endDate == null)
             {
 
-                return await _transactionRepository.GetTransactionsOfRangeDate(userId, notNullStartDate.AddHours(7), notNullStartDate.AddHours(7));
+                return await _transactionRepository.GetTransactionsOfRangeDateAsync(userId, notNullStartDate.AddHours(7), notNullStartDate.AddHours(7));
             }
             DateTime notNullEndDate = (DateTime)endDate;
 
-            return await _transactionRepository.GetTransactionsOfRangeDate(userId, notNullStartDate.AddHours(7), notNullEndDate.AddHours(7));
+            return await _transactionRepository.GetTransactionsOfRangeDateAsync(userId, notNullStartDate.AddHours(7), notNullEndDate.AddHours(7));
         }
     }
 }

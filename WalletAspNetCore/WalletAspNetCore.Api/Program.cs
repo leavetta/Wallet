@@ -5,11 +5,11 @@ using WalletAspNetCore.Auth;
 using WalletAspNetCore.DataBaseOperations;
 using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories;
-using WalletAspNetCore.Models.Entities;
 using WalletAspNetCore.Services;
 using WalletAspNetCore.Api.Helpers;
 using Microsoft.AspNetCore.CookiePolicy;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using WalletAspNetCore.DataBaseOperations.Repositories.Interfaces;
+using WalletAspNetCore.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,15 +24,15 @@ builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(J
 
 builder.Services.AddDbContext<ApplicationDbContext>();
 builder.Services.AddScoped<JwtParser>();
-builder.Services.AddScoped<BalanceRepository>();
-builder.Services.AddScoped<CategoryRepository>();
-builder.Services.AddScoped<TransactionRepository>();
-builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<AuthService>();
-builder.Services.AddScoped<BalancesService>();
-builder.Services.AddScoped<CategoriesService>();
-builder.Services.AddScoped<TransactionService>();
-builder.Services.AddScoped<UsersService>();
+builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IBalancesService, BalancesService>();
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddScoped<IUsersService, UsersService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
