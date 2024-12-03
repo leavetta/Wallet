@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using WalletAspNetCore.DataBaseOperations.EFStructures;
-using WalletAspNetCore.DataBaseOperations.Repositories;
-using Microsoft.EntityFrameworkCore;
 using WalletAspNetCore.Api.DTO.Responses;
 using Microsoft.AspNetCore.Authorization;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Net.Http.Headers;
 using WalletAspNetCore.Auth;
 using System.ComponentModel.DataAnnotations;
+using WalletAspNetCore.Services;
 
 
 namespace WalletAspNetCore.Api.Controllers
@@ -17,27 +14,25 @@ namespace WalletAspNetCore.Api.Controllers
     [Authorize]
     public class BalancesController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly BalanceRepository _balanceRepository;
+        private readonly BalancesService _balanceService;
         private readonly JwtParser _jwtParser;
 
 
-        public BalancesController(ApplicationDbContext dbContext, BalanceRepository balanceRepository, JwtParser jwtParser)
+        public BalancesController(BalancesService balanceService, JwtParser jwtParser)
         {
-            _dbContext = dbContext;
-            _balanceRepository = balanceRepository;
+            _balanceService = balanceService;
             _jwtParser = jwtParser;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetById()
+        public async Task<IActionResult> GetUserBalance()
         {
             try
             {
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                var balance = await _balanceRepository.GetByUserId(userId);
+                var balance = await _balanceService.GetByUserId(userId);
 
                 if (balance == null)
                 {
@@ -62,15 +57,14 @@ namespace WalletAspNetCore.Api.Controllers
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                await _balanceRepository.Update(userId, currentAmount);
+                var balanceId = await _balanceService.UpdateBalance(userId, currentAmount);
 
-                return Ok();
+                return Ok(balanceId);
             }
             catch
             {
                 return Unauthorized("Пользователь не залогинился");
             }
         }
-
     }
 }

@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using WalletAspNetCore.DataBaseOperations.EFStructures;
+﻿using WalletAspNetCore.DataBaseOperations.EFStructures;
+using WalletAspNetCore.DataBaseOperations.Repositories.Interfaces;
 using WalletAspNetCore.Models.Entities;
 
 namespace WalletAspNetCore.DataBaseOperations.Repositories
 {
-    public class BalanceRepository
+    public class BalanceRepository : IBalanceRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -16,9 +16,9 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
         public async Task<Guid> ApplyTransaction(User user, Transaction transaction)
         {
             var balance = await _dbContext.Balances
-                .Include(b=>b.UserNavigation)
+                .Include(b => b.UserNavigation)
                 .FirstOrDefaultAsync(b => b.UserNavigation.Id == user.Id);
-            
+
             if (balance == null)
             {
                 return Guid.Empty;
@@ -64,7 +64,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
         public async Task<Balance> GetByUserId(Guid id)
         {
             var balance = await _dbContext.Balances
-                .Include(b=>b.UserNavigation)
+                .Include(b => b.UserNavigation)
                 .FirstOrDefaultAsync(b => b.UserNavigation.Id == id);
             return balance;
         }

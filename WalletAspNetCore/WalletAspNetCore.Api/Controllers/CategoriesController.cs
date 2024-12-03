@@ -2,9 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WalletAspNetCore.Api.DTO.Requests;
 using WalletAspNetCore.Api.DTO.Responses;
-using WalletAspNetCore.DataBaseOperations.EFStructures;
-using WalletAspNetCore.DataBaseOperations.Repositories;
-using WalletAspNetCore.Models.Entities;
+using WalletAspNetCore.Services;
 
 namespace WalletAspNetCore.Api.Controllers
 {
@@ -13,26 +11,24 @@ namespace WalletAspNetCore.Api.Controllers
     [Authorize]
     public class CategoriesController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly CategoryRepository _categoryRepository;
+        private readonly CategoriesService _categoriesService;
 
-        public CategoriesController(ApplicationDbContext dbContext, CategoryRepository categoryRepository)
+        public CategoriesController(CategoriesService categoriesService)
         {
-            _dbContext = dbContext;
-            _categoryRepository = categoryRepository;
+            _categoriesService = categoriesService;
         }
 
         [HttpPost]
         public async Task<IActionResult> Create([FromBody]CreateCategoryRequest createCategoryRequest) 
-        { 
-            var category = await _categoryRepository.Create(createCategoryRequest.Name, createCategoryRequest.IsIncome);
-            return Ok(category.Id);
+        {
+            var categoryId = await _categoriesService.CreateCategory(createCategoryRequest.Name, createCategoryRequest.IsIncome);
+            return Ok(categoryId);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var category = await _categoryRepository.GetById(id);
+            var category = await _categoriesService.GetCategoryById(id);
             var categoryResponse = new CategoriesResponse(category.Id, category.Name);
 
             return Ok(categoryResponse);
@@ -42,7 +38,7 @@ namespace WalletAspNetCore.Api.Controllers
         [Route("selected")]
         public async Task<IActionResult> GetCategories(bool selectedKey)
         {
-            var categories = await _categoryRepository.GetCategories(selectedKey);
+            var categories = await _categoriesService.GetSelectedCategories(selectedKey);
 
             return Ok(categories);
         }

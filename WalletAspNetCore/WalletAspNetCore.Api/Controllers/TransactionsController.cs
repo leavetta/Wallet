@@ -1,15 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Globalization;
 using WalletAspNetCore.Api.DTO.Requests;
 using WalletAspNetCore.Api.DTO.Responses;
-using WalletAspNetCore.DataBaseOperations.EFStructures;
-using WalletAspNetCore.DataBaseOperations.Repositories;
-using WalletAspNetCore.Models.Entities;
 using WalletAspNetCore.Services;
-using System;
 using Microsoft.Net.Http.Headers;
-using System.IdentityModel.Tokens.Jwt;
 using WalletAspNetCore.Auth;
 
 
@@ -20,27 +14,13 @@ namespace WalletAspNetCore.Api.Controllers
     [Authorize]
     public class TransactionsController : ControllerBase
     {
-        private readonly ApplicationDbContext _dbContext;
-        private readonly TransactionRepository _transactionRepository;
-        private readonly UserRepository _userRepository;
-        private readonly CategoryRepository _categoryRepository;
-        private readonly BalanceRepository _balanceRepository;
         private readonly TransactionService _transactionService;
         private readonly JwtParser _jwtParser;
 
-        public TransactionsController(ApplicationDbContext dbContext, 
-            TransactionRepository transactionRepository, 
-            UserRepository userRepository, 
-            CategoryRepository categoryRepository,
-            BalanceRepository balanceRepository,
+        public TransactionsController(
             TransactionService transactionService,
             JwtParser jwtParser)
         {
-            _dbContext = dbContext;
-            _transactionRepository = transactionRepository;
-            _userRepository = userRepository;
-            _categoryRepository = categoryRepository;
-            _balanceRepository = balanceRepository;
             _transactionService = transactionService;
             _jwtParser = jwtParser;
         }
@@ -53,14 +33,9 @@ namespace WalletAspNetCore.Api.Controllers
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                var user = await _userRepository.GetById(userId);
-                var category = await _categoryRepository.GetById(transactionRequest.CategoryId);
+                var transactionId = await _transactionService.Create(userId, transactionRequest.CategoryId, transactionRequest.Amount);
 
-                var transaction = await _transactionRepository.Create(user, category, transactionRequest.Amount);
-
-                await _balanceRepository.ApplyTransaction(user, transaction);
-
-                return Ok(transaction.Id);
+                return Ok(transactionId);
             }
             catch
             {
@@ -89,19 +64,21 @@ namespace WalletAspNetCore.Api.Controllers
 
         [HttpGet]
         [Route("selected")]
-        public async Task<IActionResult> GetReportSelectedKindTransactions(Guid id, bool selectedKey)
+        public async Task<IActionResult> GetReportSelectedKindTransactions(bool selectedKey)
         {
-            Dictionary<Category, decimal> categoriesAmount = new Dictionary<Category, decimal>();
-
-            var categories = await _categoryRepository.GetSelectedCategories(id, selectedKey);
-
-            foreach (var category in categories)
+            try
             {
-                decimal amount = Math.Abs(category.Transactions.Sum(t => t.Amount));
-                categoriesAmount[category] = amount;
-            }
+                var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
+                Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-            return Ok(categoriesAmount);
+                var categoriesAmount = await _transactionService.GetReportSelectedKindTransactions(userId, selectedKey);
+
+                return Ok(categoriesAmount);
+            }
+            catch
+            {
+                return Unauthorized("Пользователь не залогинился");
+            }
         }
     }
 }

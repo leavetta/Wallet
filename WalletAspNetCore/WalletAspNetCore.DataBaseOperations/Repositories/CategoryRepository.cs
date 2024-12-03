@@ -1,9 +1,10 @@
 ﻿using WalletAspNetCore.DataBaseOperations.EFStructures;
+using WalletAspNetCore.DataBaseOperations.Repositories.Interfaces;
 using WalletAspNetCore.Models.Entities;
 
 namespace WalletAspNetCore.DataBaseOperations.Repositories
 {
-    public class CategoryRepository
+    public class CategoryRepository : ICategoryRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -34,13 +35,13 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return category;
         }
 
-        public async Task<List<Category>> GetSelectedCategories(Guid id, bool selectedKey)
+        public async Task<List<Category>> GetSelectedCategories(Guid userId, bool selectedKey)
         {
             var categories = await _dbContext.Categories
-                .Include(c=>c.Transactions.Where(u => u.UserNavigation.Id == id))
+                .Include(c => c.Transactions.Where(u => u.UserNavigation.Id == userId))
                 .ThenInclude(u => u.UserNavigation)
                 .Where(c => c.IsIncome == selectedKey)
-                
+
                 .ToListAsync();
             return categories;
         }
@@ -61,6 +62,6 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             await _dbContext.SaveChangesAsync();
             return category;
         }
-        
+
     }
 }

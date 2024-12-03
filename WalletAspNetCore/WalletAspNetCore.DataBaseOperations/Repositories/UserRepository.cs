@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using WalletAspNetCore.DataBaseOperations.EFStructures;
+﻿using WalletAspNetCore.DataBaseOperations.EFStructures;
+using WalletAspNetCore.DataBaseOperations.Repositories.Interfaces;
 using WalletAspNetCore.Models.Entities;
 
 namespace WalletAspNetCore.DataBaseOperations.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -21,8 +16,8 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
         public async Task<User> GetById(Guid id)
         {
             var userEntity = await _dbContext.Users
-                .Include(u=>u.BalanceNavigation)
-                .Include(t=>t.Transactions)
+                .Include(u => u.BalanceNavigation)
+                .Include(t => t.Transactions)
                 .FirstOrDefaultAsync(u => u.Id == id) ?? throw new Exception();
             return userEntity;
         }

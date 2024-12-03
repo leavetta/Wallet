@@ -28,8 +28,11 @@ builder.Services.AddScoped<BalanceRepository>();
 builder.Services.AddScoped<CategoryRepository>();
 builder.Services.AddScoped<TransactionRepository>();
 builder.Services.AddScoped<UserRepository>();
-builder.Services.AddScoped<UsersService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<BalancesService>();
+builder.Services.AddScoped<CategoriesService>();
 builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<UsersService>();
 
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
