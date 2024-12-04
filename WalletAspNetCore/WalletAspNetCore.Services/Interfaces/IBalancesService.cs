@@ -5,6 +5,6 @@ namespace WalletAspNetCore.Services.Interfaces
     public interface IBalancesService
     {
         Task<Balance> GetByUserIdAsync(Guid userId);
-        Task<Guid> UpdateBalanceAsync(Guid userId, decimal currentAmount);
+        Task<Guid?> UpdateBalanceAsync(Guid userId, decimal currentAmount);
     }
 }

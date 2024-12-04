@@ -13,9 +13,9 @@ namespace WalletAspNetCore.Services
             _categoryRepository = categoryRepository;
         }
 
-        public async Task<Guid> CreateCategoryAsync(string cateoryName, bool isIncome)
+        public async Task<Guid> CreateCategoryAsync(string categoryName, bool isIncome)
         {
-            var category = await _categoryRepository.CreateAsync(cateoryName, isIncome);
+            var category = await _categoryRepository.CreateAsync(categoryName, isIncome);
             return category.Id;
         }
 

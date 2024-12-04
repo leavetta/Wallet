@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletAspNetCore.Services",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletAspNetCore.Auth", "WalletAspNetCore.Auth\WalletAspNetCore.Auth.csproj", "{ECA67C41-1545-45B4-9901-F7242E2553EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseOperations.Tests", "DatabaseOperations.Tests\DatabaseOperations.Tests.csproj", "{305C8DB8-F783-455D-9E6C-00B991F2EB9A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletAspNetCore.Tests", "WalletAspNetCore.Tests\WalletAspNetCore.Tests.csproj", "{D81AA09C-860B-4326-8606-87FF9522CBED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,10 +46,10 @@ Global
 		{ECA67C41-1545-45B4-9901-F7242E2553EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECA67C41-1545-45B4-9901-F7242E2553EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECA67C41-1545-45B4-9901-F7242E2553EE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{305C8DB8-F783-455D-9E6C-00B991F2EB9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{305C8DB8-F783-455D-9E6C-00B991F2EB9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{305C8DB8-F783-455D-9E6C-00B991F2EB9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{305C8DB8-F783-455D-9E6C-00B991F2EB9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D81AA09C-860B-4326-8606-87FF9522CBED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D81AA09C-860B-4326-8606-87FF9522CBED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D81AA09C-860B-4326-8606-87FF9522CBED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D81AA09C-860B-4326-8606-87FF9522CBED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

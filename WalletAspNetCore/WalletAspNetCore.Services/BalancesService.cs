@@ -19,7 +19,7 @@ namespace WalletAspNetCore.Services
             return balance;
         }
 
-        public async Task<Guid> UpdateBalanceAsync(Guid userId, decimal currentAmount)
+        public async Task<Guid?> UpdateBalanceAsync(Guid userId, decimal currentAmount)
         {
             var balanceId = await _balanceRepository.UpdateAsync(userId, currentAmount);
             return balanceId;
