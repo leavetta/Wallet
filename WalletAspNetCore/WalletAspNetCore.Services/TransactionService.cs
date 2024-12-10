@@ -36,28 +36,13 @@ namespace WalletAspNetCore.Services
             return transaction.Id;
         }
 
-        public async Task<Dictionary<Category, decimal>> GetReportSelectedKindTransactionsAsync(Guid userId, bool selectedKey)
+        public async Task<List<Transaction>> GetSelectedKindTransactionsAmountAsync(Guid userId, bool isIncome)
         {
-            Dictionary<Category, decimal> categoriesAmount = new Dictionary<Category, decimal>();
+            var transactions = await _transactionRepository.GetSelectedKindTransactionsAsync(userId, isIncome);
 
-            var categories = await _categoryRepository.GetSelectedCategoriesAsync(userId, selectedKey);
-
-            foreach (var category in categories)
-            {
-                decimal amount = Math.Abs(category.Transactions.Sum(t => t.Amount));
-                categoriesAmount[category] = amount;
-            }
-
-            return categoriesAmount;
+            //var amount = Math.Abs(transactions.Sum(x => x.Amount));
+            return transactions;
         }
-
-        //public async Task<decimal> GetSelectedKindTransactionsAmount(Guid userId, bool isIncome)
-        //{
-        //    var transactions = await _transactionRepository.GetSelectedKindTransactions(userId, isIncome);
-
-        //    var amount = Math.Abs(transactions.Sum(x => x.Amount));
-        //    return amount;
-        //}
 
         //public async Task<decimal> GetSelectedCategoryTransactionsAmount(Guid userId, Guid categoryId)
         //{

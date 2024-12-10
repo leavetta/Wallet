@@ -6,6 +6,7 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories.Interfaces
     {
         Task<Transaction> CreateAsync(User user, Category category, decimal amount);
         Task<List<Transaction>> GetAllAsync(Guid id);
+        Task<List<Transaction>> GetSelectedKindTransactionsAsync(Guid id, bool isIncome);
         Task<List<Transaction>> GetTransactionsOfRangeDateAsync(Guid userId, DateTime startDate, DateTime endDate);
     }
 }

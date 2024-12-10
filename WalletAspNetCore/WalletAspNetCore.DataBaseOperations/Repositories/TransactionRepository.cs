@@ -27,18 +27,18 @@ namespace WalletAspNetCore.DataBaseOperations.Repositories
             return userTransactions;
         }
 
-        //public async Task<List<Transaction>> GetSelectedKindTransactions(Guid id, bool isIncome)
-        //{
-        //    var userTransactions = await _dbContext.Transactions
-        //        .Include(u => u.UserNavigation)
-        //        .Where(u => u.UserNavigation.Id == id)
-        //        .Include(c => c.CategoryNavigation)
-        //        .Where(c => c.CategoryNavigation.IsIncome == isIncome)
-        //        .AsNoTracking()
-        //        .ToListAsync();
+        public async Task<List<Transaction>> GetSelectedKindTransactionsAsync(Guid id, bool isIncome)
+        {
+            var userTransactions = await _dbContext.Transactions
+                .Include(u => u.UserNavigation)
+                .Where(u => u.UserNavigation.Id == id)
+                .Include(c => c.CategoryNavigation)
+                .Where(c => c.CategoryNavigation.IsIncome == isIncome)
+                .AsNoTracking()
+                .ToListAsync();
 
-        //    return userTransactions;
-        //}
+            return userTransactions;
+        }
 
         //public async Task<List<Transaction>> GetSelectedCategoryTransactions(Guid userId, Guid categoryId)
         //{

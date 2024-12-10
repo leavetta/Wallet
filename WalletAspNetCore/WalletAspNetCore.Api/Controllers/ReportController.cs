@@ -1,41 +1,39 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using WalletAspNetCore.Api.DTO.Requests;
-using WalletAspNetCore.Api.DTO.Responses;
-using WalletAspNetCore.Services;
 using Microsoft.Net.Http.Headers;
 using WalletAspNetCore.Auth;
-
+using WalletAspNetCore.Services.Interfaces;
 
 namespace WalletAspNetCore.Api.Controllers
 {
+    [Route("api/[controller]")]
     [ApiController]
-    [Route("[controller]")]
     [Authorize]
-    public class TransactionsController : ControllerBase
+    public class ReportController : ControllerBase
     {
-        private readonly TransactionService _transactionService;
+        private readonly IReportService _reportService;
         private readonly JwtParser _jwtParser;
 
-        public TransactionsController(
-            TransactionService transactionService,
-            JwtParser jwtParser)
+        public ReportController(IReportService reportService, JwtParser jwtParser)
         {
-            _transactionService = transactionService;
+            _reportService = reportService;
             _jwtParser = jwtParser;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateTransactionRequest transactionRequest)
+        [HttpGet]
+        [Route("income")]
+        public async Task<IActionResult> GetIncomeReportAsync()
         {
             try
             {
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                var transactionId = await _transactionService.CreateAsync(userId, transactionRequest.CategoryId, transactionRequest.Amount);
 
-                return Ok(transactionId);
+                //var categoriesAmount = await _reportService.(userId);
+                //categoriesAmount
+                return Ok();
             }
             catch
             {
@@ -44,17 +42,17 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTransactions(DateTime? startDate, DateTime? endDate)
+        [Route("expenses")]
+        public async Task<IActionResult> GetReportAboutExpensesAsync()
         {
             try
             {
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                var transactions = await _transactionService.GetTransactionsAsync(userId, startDate, endDate);
-                var transactionsResponse = transactions.Select(t => new TransactionResponse(t.Id, t.Amount, t.OperationDate.ToString("dd.MM.yyyy hh:mm:ss"), t.CategoryNavigation.Name));
-
-                return Ok(transactionsResponse);
+                //var categoriesAmount = await _reportService.GetReportByCategoriesAsync(userId);
+                //categoriesAmount
+                return Ok();
             }
             catch
             {
