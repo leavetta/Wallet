@@ -1,6 +1,6 @@
-﻿namespace WalletAspNetCore.Api.DTO.Responses
+﻿namespace WalletAspNetCore.Models.DTO.Responses
 {
-    public record TransactionResponse
+    public record TransactionDto
     (
         Guid id,
         decimal Amount,

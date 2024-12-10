@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
-using WalletAspNetCore.Api.DTO.Requests;
-using WalletAspNetCore.Api.DTO.Responses;
+using WalletAspNetCore.Models.DTO.Requests;
+using WalletAspNetCore.Models.DTO.Responses;
 using WalletAspNetCore.Auth;
 using WalletAspNetCore.Services;
 

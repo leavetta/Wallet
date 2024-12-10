@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-namespace WalletAspNetCore.Api.DTO.Requests
+namespace WalletAspNetCore.Models.DTO.Requests
 {
     public record CreateCategoryRequest(
         [Required] string Name,

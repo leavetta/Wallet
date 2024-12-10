@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace WalletAspNetCore.Api.DTO.Requests
+namespace WalletAspNetCore.Models.DTO.Requests
 {
     public record LoginUserRequest(
         [Required] string Email,

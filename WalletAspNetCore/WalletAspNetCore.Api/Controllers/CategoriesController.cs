@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using WalletAspNetCore.Api.DTO.Requests;
-using WalletAspNetCore.Api.DTO.Responses;
+using WalletAspNetCore.Models.DTO.Requests;
+using WalletAspNetCore.Models.DTO.Responses;
 using WalletAspNetCore.Services;
 
 namespace WalletAspNetCore.Api.Controllers
