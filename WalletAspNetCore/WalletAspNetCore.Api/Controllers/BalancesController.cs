@@ -25,7 +25,7 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetUserBalance()
+        public async Task<IActionResult> GetUserBalanceAsync()
         {
             try
             {
@@ -50,7 +50,7 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> UpdateBalance([Required] decimal currentAmount)
+        public async Task<IActionResult> UpdateBalanceAsync([Required] decimal currentAmount)
         {
             try
             {

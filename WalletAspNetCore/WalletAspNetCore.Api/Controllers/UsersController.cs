@@ -25,7 +25,7 @@ namespace WalletAspNetCore.Api.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserRequest registerUserRequest)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterUserRequest registerUserRequest)
         {
             var userId = await _authService.RegisterAsync(registerUserRequest.Name, registerUserRequest.Email, registerUserRequest.Password);
             
@@ -34,7 +34,7 @@ namespace WalletAspNetCore.Api.Controllers
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login([FromBody] LoginUserRequest loginUserRequest)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginUserRequest loginUserRequest)
         {
             var token = await _authService.LoginAsync(loginUserRequest.Email, loginUserRequest.Password);
             //HttpContext.Response.Cookies.Append("secretCookie", token.Item1);
@@ -44,7 +44,7 @@ namespace WalletAspNetCore.Api.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetById()
+        public async Task<IActionResult> GetByIdAsync()
         {
             try
             {

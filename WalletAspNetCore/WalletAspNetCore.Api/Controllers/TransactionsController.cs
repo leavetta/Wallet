@@ -26,7 +26,7 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateTransactionRequest transactionRequest)
+        public async Task<IActionResult> CreateAsync([FromBody] CreateTransactionRequest transactionRequest)
         {
             try
             {
@@ -44,7 +44,7 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTransactions(DateTime? startDate, DateTime? endDate)
+        public async Task<IActionResult> GetTransactionsAsync(DateTime? startDate, DateTime? endDate)
         {
             try
             {

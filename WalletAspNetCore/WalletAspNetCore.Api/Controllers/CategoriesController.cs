@@ -19,14 +19,14 @@ namespace WalletAspNetCore.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody]CreateCategoryRequest createCategoryRequest) 
+        public async Task<IActionResult> CreateAsync([FromBody]CreateCategoryRequest createCategoryRequest) 
         {
             var categoryId = await _categoriesService.CreateCategoryAsync(createCategoryRequest.Name, createCategoryRequest.IsIncome);
             return Ok(categoryId);
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             var category = await _categoriesService.GetCategoryByIdAsync(id);
             var categoryResponse = new CategoriesResponse(category.Id, category.Name);
@@ -36,7 +36,7 @@ namespace WalletAspNetCore.Api.Controllers
 
         [HttpGet]
         [Route("selected")]
-        public async Task<IActionResult> GetCategories(bool selectedKey)
+        public async Task<IActionResult> GetCategoriesAsync(bool selectedKey)
         {
             var categories = await _categoriesService.GetSelectedCategoriesAsync(selectedKey);
 
