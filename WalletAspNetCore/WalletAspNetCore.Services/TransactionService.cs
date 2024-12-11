@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using WalletAspNetCore.DataBaseOperations.EFStructures;
 using WalletAspNetCore.DataBaseOperations.Repositories.Interfaces;
 using WalletAspNetCore.Models.Entities;
 using WalletAspNetCore.Services.Interfaces;
@@ -11,29 +12,44 @@ namespace WalletAspNetCore.Services
         private readonly IUserRepository _userRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IBalanceRepository _balanceRepository;
+        private readonly ApplicationDbContext _applicationDbContext;
 
         public TransactionService(
             ITransactionRepository transactionRepository,
             IUserRepository userRepository,
             ICategoryRepository categoryRepository,
-            IBalanceRepository balanceRepository)
+            IBalanceRepository balanceRepository,
+            ApplicationDbContext applicationDbContext)
         {
             _transactionRepository = transactionRepository;
             _userRepository = userRepository;
             _categoryRepository = categoryRepository;
             _balanceRepository = balanceRepository;
+            _applicationDbContext = applicationDbContext;
         }
 
         public async Task<Guid> CreateAsync(Guid userId, Guid categoryId, decimal amount)
         {
-            var user = await _userRepository.GetByIdAsync(userId);
-            var category = await _categoryRepository.GetByIdAsync(categoryId);
+            using var ts = _applicationDbContext.Database.BeginTransaction();
+            try
+            {
+                var user = await _userRepository.GetByIdAsync(userId);
+                var category = await _categoryRepository.GetByIdAsync(categoryId);
 
-            var transaction = await _transactionRepository.CreateAsync(user, category, amount);
+                var transaction = await _transactionRepository.CreateAsync(user, category, amount);
 
-            await _balanceRepository.ApplyTransactionAsync(user, transaction);
+                await _balanceRepository.ApplyTransactionAsync(user, transaction);
 
-            return transaction.Id;
+                await ts.CommitAsync();
+
+                return transaction.Id;
+            }
+            catch (Exception)
+            {
+                await ts.RollbackAsync();
+
+                throw;
+            }
         }
 
         public async Task<List<Transaction>> GetSelectedKindTransactionsAmountAsync(Guid userId, bool isIncome)
