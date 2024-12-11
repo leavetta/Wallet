@@ -2,6 +2,7 @@
 {
     public record ReportResponse
     (
-        List<ReportDto> ReportDtos
+        List<ReportDto> ReportDtos,
+        decimal TotalAmount
     );
 }

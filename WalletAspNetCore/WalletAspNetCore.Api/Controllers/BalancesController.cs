@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Net.Http.Headers;
 using WalletAspNetCore.Auth;
 using System.ComponentModel.DataAnnotations;
-using WalletAspNetCore.Services;
+using WalletAspNetCore.Services.Interfaces;
 
 
 namespace WalletAspNetCore.Api.Controllers
@@ -14,11 +14,11 @@ namespace WalletAspNetCore.Api.Controllers
     [Authorize]
     public class BalancesController : ControllerBase
     {
-        private readonly BalancesService _balanceService;
+        private readonly IBalancesService _balanceService;
         private readonly JwtParser _jwtParser;
 
 
-        public BalancesController(BalancesService balanceService, JwtParser jwtParser)
+        public BalancesController(IBalancesService balanceService, JwtParser jwtParser)
         {
             _balanceService = balanceService;
             _jwtParser = jwtParser;

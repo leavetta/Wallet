@@ -4,6 +4,6 @@
     (
         CategoryDto CategoryDto, 
         decimal Amount, 
-        List<TransactionDto> TransactionDtos
+        IEnumerable<TransactionDto> TransactionDtos
     );
 }

@@ -2,7 +2,7 @@
 {
     public record TransactionDto
     (
-        Guid id,
+        Guid Id,
         decimal Amount,
         string OperationDate,
         string CategoryName

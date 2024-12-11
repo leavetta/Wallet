@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using WalletAspNetCore.Auth;
+using WalletAspNetCore.Models.DTO.Responses;
 using WalletAspNetCore.Services.Interfaces;
 
 namespace WalletAspNetCore.Api.Controllers
@@ -10,12 +11,12 @@ namespace WalletAspNetCore.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ReportController : ControllerBase
+    public class ReportsController : ControllerBase
     {
         private readonly IReportService _reportService;
         private readonly JwtParser _jwtParser;
 
-        public ReportController(IReportService reportService, JwtParser jwtParser)
+        public ReportsController(IReportService reportService, JwtParser jwtParser)
         {
             _reportService = reportService;
             _jwtParser = jwtParser;
@@ -30,10 +31,9 @@ namespace WalletAspNetCore.Api.Controllers
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
+                var reportResponse = await _reportService.GenerateReportAboutIncomeByCtegoriesAsync(userId);
 
-                //var categoriesAmount = await _reportService.(userId);
-                //categoriesAmount
-                return Ok();
+                return Ok(reportResponse);
             }
             catch
             {
@@ -50,9 +50,9 @@ namespace WalletAspNetCore.Api.Controllers
                 var authToken = HttpContext.Request.Headers[HeaderNames.Authorization].ToString().Replace("Bearer ", "");
                 Guid userId = _jwtParser.ExtractIdUser(authToken) ?? throw new ArgumentNullException();
 
-                //var categoriesAmount = await _reportService.GetReportByCategoriesAsync(userId);
-                //categoriesAmount
-                return Ok();
+                var reportResponse = await _reportService.GenerateReportAboutExpensesByCategoriesAsync(userId);
+
+                return Ok(reportResponse);
             }
             catch
             {

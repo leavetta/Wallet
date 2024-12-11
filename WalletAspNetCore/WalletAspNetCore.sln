@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletAspNetCore.Services",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletAspNetCore.Auth", "WalletAspNetCore.Auth\WalletAspNetCore.Auth.csproj", "{ECA67C41-1545-45B4-9901-F7242E2553EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WalletAspNetCore.Tests", "WalletAspNetCore.Tests\WalletAspNetCore.Tests.csproj", "{D81AA09C-860B-4326-8606-87FF9522CBED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WalletAspNetCore.Tests", "WalletAspNetCore.Tests\WalletAspNetCore.Tests.csproj", "{D81AA09C-860B-4326-8606-87FF9522CBED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

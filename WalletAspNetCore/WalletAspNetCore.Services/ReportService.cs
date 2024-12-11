@@ -1,4 +1,5 @@
 ﻿using WalletAspNetCore.Models.Entities;
+using WalletAspNetCore.Models.DTO.Responses;
 using WalletAspNetCore.Services.Interfaces;
 
 namespace WalletAspNetCore.Services
@@ -12,36 +13,73 @@ namespace WalletAspNetCore.Services
             _transactionService = transactionService;
         }
 
-        //public async Task<Dictionary<Category, decimal>> GetReportAboutIncomeByCtegoriesAsync(Guid userId)
-        //{
-        //    Dictionary<Category, decimal> categoriesAmount = new Dictionary<Category, decimal>();
-        //    List<ReportDto>
+        public async Task<ReportResponse> GenerateReportAboutIncomeByCtegoriesAsync(Guid userId)
+        {
+            bool isIncome = true;
+            var transactions = await _transactionService.GetSelectedKindTransactionsAmountAsync(userId, isIncome);
 
-        //    bool isIncome = true;
-        //    var transactions = await _transactionService.GetSelectedKindTransactionsAmountAsync(userId, isIncome);
+            var reportResponse = CreateReportResponse(transactions);
+            return reportResponse;
+        }
 
-        //    foreach (var category in categories)
-        //    {
-        //        decimal amount = Math.Abs(category.Transactions.Sum(t => t.Amount));
-        //        categoriesAmount[category] = amount;
-        //    }
+        public async Task<ReportResponse> GenerateReportAboutExpensesByCategoriesAsync(Guid userId)
+        {
+            bool isIncome = false;
+            var transactions = await _transactionService.GetSelectedKindTransactionsAmountAsync(userId, isIncome);
 
-        //    return categoriesAmount;
-        //}
+            var reportResponse = CreateReportResponse(transactions);
+            return reportResponse;
+        }
 
-        //public async Task<Dictionary<Category, decimal>> GetReportAboutExpensesByCategoriesAsync(Guid userId)
-        //{
-        //    Dictionary<Category, decimal> categoriesAmount = new Dictionary<Category, decimal>();
-        //    bool isIncome = false;
-        //    var transactions = await _transactionService.GetSelectedKindTransactionsAmountAsync(userId, isIncome);
+        private static ReportResponse CreateReportResponse(List<Transaction> transactions)
+        {
+            var reportDtos = FillReportDtos(transactions);
 
-        //    foreach (var category in categories)
-        //    {
-        //        decimal amount = Math.Abs(category.Transactions.Sum(t => t.Amount));
-        //        categoriesAmount[category] = amount;
-        //    }
+            var totalAmount = CalculateTotalAmount(transactions);
 
-        //    return categoriesAmount;
-        //}
+            var reportResponse =
+                new ReportResponse(
+                    reportDtos,
+                    totalAmount);
+
+            return reportResponse;
+        }
+
+        private static List<ReportDto> FillReportDtos(List<Transaction> transactions)
+        {
+            List<ReportDto> reportDtos = new();
+
+            var categories = transactions.Select(x => x.CategoryNavigation).GroupBy(c => c.Name).Select(grp => grp.First());
+
+            foreach (var category in categories)
+            {
+                var transactionsOfCategory = transactions
+                    .Where(x => x.CategoryNavigation.Name == category.Name)
+                    .Select(t => new TransactionDto(
+                        t.Id,
+                        t.Amount,
+                        t.OperationDate.ToString("dd.MM.yyyy hh:mm:ss"),
+                        category.Name));
+
+                var transactionsOfCategoryAmount = transactionsOfCategory.Sum(t => t.Amount);
+
+                reportDtos.Add(
+                    new ReportDto(
+                        new CategoryDto(
+                            category.Id,
+                            category.Name
+                        ),
+                        transactionsOfCategoryAmount,
+                        transactionsOfCategory
+                    ));
+            }
+
+            return reportDtos;
+        }
+
+        private static decimal CalculateTotalAmount(List<Transaction> transactions)
+        {
+            return transactions.Sum(t => t.Amount);
+        }
     }
 }

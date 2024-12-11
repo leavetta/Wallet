@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using WalletAspNetCore.Models.DTO.Requests;
 using WalletAspNetCore.Models.DTO.Responses;
-using WalletAspNetCore.Services;
 using Microsoft.Net.Http.Headers;
 using WalletAspNetCore.Auth;
+using WalletAspNetCore.Services.Interfaces;
 
 
 namespace WalletAspNetCore.Api.Controllers
@@ -14,11 +14,11 @@ namespace WalletAspNetCore.Api.Controllers
     [Authorize]
     public class TransactionsController : ControllerBase
     {
-        private readonly TransactionService _transactionService;
+        private readonly ITransactionService _transactionService;
         private readonly JwtParser _jwtParser;
 
         public TransactionsController(
-            TransactionService transactionService,
+            ITransactionService transactionService,
             JwtParser jwtParser)
         {
             _transactionService = transactionService;

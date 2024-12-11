@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WalletAspNetCore.DataBaseOperations\WalletAspNetCore.DataBaseOperations.csproj" />
+    <ProjectReference Include="..\WalletAspNetCore.Models\WalletAspNetCore.Models.csproj" />
     <ProjectReference Include="..\WalletAspNetCore.Services\WalletAspNetCore.Services.csproj" />
   </ItemGroup>
 

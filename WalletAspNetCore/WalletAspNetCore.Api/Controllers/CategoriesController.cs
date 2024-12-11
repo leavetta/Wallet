@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WalletAspNetCore.Models.DTO.Requests;
 using WalletAspNetCore.Models.DTO.Responses;
-using WalletAspNetCore.Services;
+using WalletAspNetCore.Services.Interfaces;
 
 namespace WalletAspNetCore.Api.Controllers
 {
@@ -11,9 +11,9 @@ namespace WalletAspNetCore.Api.Controllers
     [Authorize]
     public class CategoriesController : ControllerBase
     {
-        private readonly CategoriesService _categoriesService;
+        private readonly ICategoriesService _categoriesService;
 
-        public CategoriesController(CategoriesService categoriesService)
+        public CategoriesController(ICategoriesService categoriesService)
         {
             _categoriesService = categoriesService;
         }

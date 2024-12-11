@@ -4,7 +4,7 @@ using Microsoft.Net.Http.Headers;
 using WalletAspNetCore.Models.DTO.Requests;
 using WalletAspNetCore.Models.DTO.Responses;
 using WalletAspNetCore.Auth;
-using WalletAspNetCore.Services;
+using WalletAspNetCore.Services.Interfaces;
 
 namespace WalletAspNetCore.Api.Controllers
 {
@@ -12,11 +12,11 @@ namespace WalletAspNetCore.Api.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly AuthService _authService;
-        private readonly UsersService _userService;
+        private readonly IAuthService _authService;
+        private readonly IUsersService _userService;
         private readonly JwtParser _jwtParser;
 
-        public UsersController(AuthService authService, UsersService userService, JwtParser jwtParser)
+        public UsersController(IAuthService authService, IUsersService userService, JwtParser jwtParser)
         {
             _jwtParser = jwtParser;
             _authService = authService;
